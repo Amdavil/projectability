@@ -941,50 +941,76 @@
   // NOTICIAS — carga automática por tema
   // ══════════════════════════════════════════
   const NEWS_TOPICS = {
-    circular:  { label: '♻️ Economía Circular',      q: 'economia circular reciclaje residuos sostenibilidad empresas' },
-    esg:       { label: '📊 ESG & Sostenibilidad',    q: 'ESG sostenibilidad corporativa reporte ambiental social' },
-    ia:        { label: '🤖 IA & Medio Ambiente',     q: 'inteligencia artificial sostenibilidad medio ambiente energia' },
-    ods:       { label: '🌍 ODS & Empresas',          q: 'objetivos desarrollo sostenible empresas impacto social ODS' },
-    colombia:  { label: '🇨🇴 Colombia Verde',         q: 'sostenibilidad Colombia medio ambiente empresas verdes' },
+    circular: { q: 'economia circular reciclaje residuos sostenibilidad empresas' },
+    esg:      { q: 'ESG sostenibilidad corporativa reporte ambiental social' },
+    ia:       { q: 'inteligencia artificial sostenibilidad medio ambiente energia' },
+    ods:      { q: 'objetivos desarrollo sostenible empresas impacto social ODS' },
+    colombia: { q: 'sostenibilidad Colombia medio ambiente empresas verdes' },
   };
+
+  // Proxies CORS con parseo XML nativo — sin APIs de terceros con límites
+  const PROXIES = [
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}`,
+  ];
 
   let currentTopic = 'circular';
 
-  function getCacheKey(topicId) {
-    return `news_${topicId}_${new Date().toISOString().split('T')[0]}`;
+  function getCacheKey(id) {
+    return `news_${id}_${new Date().toISOString().split('T')[0]}`;
   }
 
   function fmtDate(str) {
-    try {
-      return new Date(str).toLocaleDateString('es-CO', { day:'numeric', month:'short', year:'numeric' });
-    } catch { return str; }
+    try { return new Date(str).toLocaleDateString('es-CO', { day:'numeric', month:'short', year:'numeric' }); }
+    catch { return ''; }
   }
 
-  function cleanTitle(title) {
-    return title.replace(/\s-\s[^-]+$/, '').replace(/\s–\s[^–]+$/, '').trim();
+  function txt(el, sel) { return el.querySelector(sel)?.textContent?.trim() || ''; }
+
+  function parseXML(xmlText) {
+    const xml   = new DOMParser().parseFromString(xmlText, 'text/xml');
+    const items = [...xml.querySelectorAll('item')].slice(0, 9);
+    return items.map(item => {
+      const rawTitle = txt(item, 'title');
+      // Google News añade " - Fuente" al final del título
+      const dashIdx  = rawTitle.lastIndexOf(' - ');
+      const title    = dashIdx > 20 ? rawTitle.slice(0, dashIdx) : rawTitle;
+      const source   = dashIdx > 20 ? rawTitle.slice(dashIdx + 3) : txt(item, 'source');
+      const link     = txt(item, 'link') || item.querySelector('link')?.getAttribute('href') || '#';
+      const date     = fmtDate(txt(item, 'pubDate'));
+      return { title, source, link, date };
+    });
   }
 
-  function buildCards(items) {
-    return items.slice(0, 9).map(item => {
-      const source = (item.author || '').replace(/,.*$/, '').trim() || 'Fuente';
-      const title  = cleanTitle(item.title);
-      const date   = fmtDate(item.pubDate);
-      const img    = item.thumbnail
-        ? `<img src="${item.thumbnail}" class="news-card-img" alt="" loading="lazy" onerror="this.remove()">`
-        : '';
-      return `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-card">
-        ${img}
-        <div class="news-card-source">${source}</div>
-        <div class="news-card-title">${title}</div>
-        <div class="news-card-date">📅 ${date}</div>
-      </a>`;
-    }).join('');
+  function buildCards(articles) {
+    if (!articles.length) return '<div class="news-error">No se encontraron artículos.</div>';
+    return articles.map(a => `
+      <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="news-card">
+        <div class="news-card-source">${a.source || 'Fuente'}</div>
+        <div class="news-card-title">${a.title}</div>
+        <div class="news-card-date">📅 ${a.date}</div>
+      </a>`).join('');
+  }
+
+  async function fetchWithProxy(rssUrl) {
+    for (const makeProxy of PROXIES) {
+      try {
+        const ctrl  = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 9000);
+        const res   = await fetch(makeProxy(rssUrl), { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (!res.ok) continue;
+        const text  = await res.text();
+        const items = parseXML(text);
+        if (items.length) return items;
+      } catch { /* intentar siguiente proxy */ }
+    }
+    throw new Error('Sin conexión');
   }
 
   async function loadNews(topicId) {
     currentTopic = topicId;
-
-    // Activar tab
     document.querySelectorAll('.news-tab').forEach(t =>
       t.classList.toggle('activo', t.dataset.topic === topicId)
     );
@@ -992,66 +1018,45 @@
     const grid   = document.getElementById('newsGrid');
     const status = document.getElementById('newsStatus');
 
-    // Usar caché del día si existe
-    const cacheKey = getCacheKey(topicId);
-    const cached   = sessionStorage.getItem(cacheKey);
+    // Caché del día
+    const key    = getCacheKey(topicId);
+    const cached = sessionStorage.getItem(key);
     if (cached) {
       grid.innerHTML = cached;
-      status.textContent = '✓ Noticias del día · desde caché';
+      status.textContent = '✓ Noticias actualizadas hoy';
       return;
     }
 
-    // Mostrar spinner
-    grid.innerHTML = `<div class="news-loading">
-      <div class="news-spinner"></div>
-      Cargando noticias actualizadas…
-    </div>`;
+    grid.innerHTML = `<div class="news-loading"><div class="news-spinner"></div>Cargando noticias…</div>`;
     status.textContent = '';
 
-    const topic  = NEWS_TOPICS[topicId];
-    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(topic.q)}&hl=es&gl=CO&ceid=CO:es`;
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=9`;
+    const q      = NEWS_TOPICS[topicId].q;
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es&gl=CO&ceid=CO:es`;
 
     try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 12000);
-      const res   = await fetch(apiUrl, { signal: controller.signal });
-      clearTimeout(timer);
-      const data  = await res.json();
-
-      if (data.status === 'ok' && data.items?.length) {
-        const html = buildCards(data.items);
-        grid.innerHTML = html;
-        sessionStorage.setItem(cacheKey, html);
-        status.textContent = `✓ ${data.items.length} artículos · ${new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' })}`;
-      } else {
-        throw new Error('sin resultados');
-      }
-    } catch (err) {
-      const msg = err.name === 'AbortError' ? 'Tiempo de espera agotado.' : 'No se pudo conectar al servicio.';
+      const articles = await fetchWithProxy(rssUrl);
+      const html     = buildCards(articles);
+      grid.innerHTML = html;
+      sessionStorage.setItem(key, html);
+      status.textContent = `✓ ${articles.length} artículos · ${new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' })}`;
+    } catch {
       grid.innerHTML = `<div class="news-error">
         <div style="font-size:2rem;margin-bottom:10px">🔌</div>
-        <p style="margin-bottom:14px">${msg} Verifique su conexión e intente de nuevo.</p>
-        <button class="news-refresh" onclick="loadNews('${topicId}')">↻ Reintentar</button>
+        <p style="margin-bottom:14px">No se pudieron cargar las noticias. Intente de nuevo.</p>
+        <button class="news-refresh" onclick="refreshNews()">↻ Reintentar</button>
       </div>`;
-      status.textContent = '⚠ Error al cargar noticias.';
+      status.textContent = '⚠ Sin conexión al servicio de noticias.';
     }
   }
 
   function refreshNews() {
-    // Borrar caché del tema actual y recargar
     sessionStorage.removeItem(getCacheKey(currentTopic));
     loadNews(currentTopic);
   }
 
-  // Carga inicial al entrar en el viewport (lazy)
-  const newsObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        loadNews('circular');
-        newsObs.disconnect();
-      }
-    });
+  // Carga lazy al hacer scroll hasta la sección
+  const newsObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { loadNews('circular'); newsObs.disconnect(); } });
   }, { threshold: 0.1 });
   const newsSection = document.getElementById('tendencias');
   if (newsSection) newsObs.observe(newsSection);
