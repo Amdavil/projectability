@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synergies Projections | PROJECTABILITY</title>
+  <meta name="description" content="Consultoría estratégica en sostenibilidad corporativa. Soluciones TBL-ESG para generar valor continuo y proyectable a stakeholders, entorno y sociedad.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #0D1F07;
+      --navy2:  #152E0A;
+      --navy3:  #1F420E;
+      --green:  #2D5016;
+      --green2: #3A6B1A;
+      --green3: #4F8A24;
+      --gold:   #C8A951;
+      --gold2:  #E8C96B;
+      --white:  #F8FAFC;
+      --gray:   #94A3B8;
+      --gray2:  #CBD5E1;
+      --gray3:  #E2E8F0;
+      --text:   #1A2E0D;
+      --r: 12px;
+      --shadow: 0 4px 32px rgba(0,0,0,.15);
+      --shadow-lg: 0 8px 48px rgba(0,0,0,.25);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--white); color: var(--text); line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(13,31,7,.97); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(200,169,81,.2); transition: border-color .3s;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 70px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo-pill {
+      background: #fff; border-radius: 8px; padding: 6px 14px;
+      display: flex; align-items: center; transition: opacity .2s;
+    }
+    .nav-logo-pill:hover { opacity: .88; }
+    .nav-logo-img { height: 38px; width: auto; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      color: var(--gray2); text-decoration: none; font-size: .84rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 8px; transition: all .2s; white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--gold); background: rgba(200,169,81,.1); }
+    .nav-cta { background: var(--gold); color: var(--navy) !important; font-weight: 700; padding: 8px 18px !important; }
+    .nav-cta:hover { background: var(--gold2) !important; color: var(--navy) !important; }
+    .nav-toggle { display: none; background: none; border: none; color: var(--white); font-size: 1.4rem; cursor: pointer; padding: 4px; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; padding: 120px 24px 80px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, var(--navy3) 100%);
+      display: flex; align-items: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -50%; right: -20%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(43,125,50,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -30%; left: -10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(200,169,81,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content {
+      max-width: 1200px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,169,81,.12); border: 1px solid rgba(200,169,81,.3); color: var(--gold);
+      padding: 6px 16px; border-radius: 20px; font-size: .75rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--green3); border-radius: 50%; }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-subtitle { font-size: 1.05rem; color: var(--gray2); margin-bottom: 32px; line-height: 1.7; max-width: 500px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px;
+      border-radius: 10px; font-weight: 700; font-size: .9rem; text-decoration: none;
+      transition: all .25s; cursor: pointer; border: none; white-space: nowrap;
+    }
+    .btn-primary { background: var(--gold); color: var(--navy); }
+    .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,169,81,.35); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-outline:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.5); transform: translateY(-1px); }
+    .btn-green { background: var(--green2); color: var(--white); }
+    .btn-green:hover { background: var(--green3); transform: translateY(-1px); }
+
+    .hero-visual { display: flex; flex-direction: column; gap: 16px; }
+    .hero-card {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r); padding: 20px 24px; backdrop-filter: blur(8px);
+    }
+    .hero-card-title { font-size: .72rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .hero-card-text  { font-size: .88rem; color: var(--gray2); }
+    .hero-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .hero-stat {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(200,169,81,.15);
+      border-radius: 10px; padding: 16px 12px; text-align: center;
+    }
+    .hero-stat-num   { font-size: 1.8rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .hero-stat-label { font-size: .68rem; color: var(--gray); text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; padding: 4px 14px; border-radius: 20px;
+      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
+      background: rgba(43,125,50,.1); color: var(--green2); border: 1px solid rgba(43,125,50,.2);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 700; color: var(--navy); line-height: 1.25; margin-bottom: 16px;
+    }
+    .section-subtitle { font-size: 1rem; color: #64748B; max-width: 600px; line-height: 1.7; }
+    .section-header { margin-bottom: 56px; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-subtitle { margin: 0 auto; }
+
+    /* ── SERVICIOS ── */
+    .servicios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
+    .servicio-card {
+      background: #F8FAFC; border: 1px solid var(--gray3); border-radius: var(--r); padding: 28px;
+      transition: all .3s; position: relative; overflow: hidden;
+    }
+    .servicio-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--green2), var(--gold));
+      transform: scaleX(0); transform-origin: left; transition: transform .3s;
+    }
+    .servicio-card:hover { border-color: var(--green3); box-shadow: var(--shadow); transform: translateY(-3px); }
+    .servicio-card:hover::before { transform: scaleX(1); }
+    .servicio-icon  { font-size: 2rem; margin-bottom: 16px; display: block; }
+    .servicio-title { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .servicio-desc  { font-size: .86rem; color: #64748B; line-height: 1.6; }
+
+    /* ── METODOLOGÍA ── */
+    .metodologia {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%); color: var(--white);
+    }
+    .metodologia .section-title    { color: var(--white); }
+    .metodologia .section-subtitle { color: var(--gray2); }
+    .metodologia .section-tag { background: rgba(200,169,81,.15); color: var(--gold); border-color: rgba(200,169,81,.3); }
+    .metodo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .metodo-pillars { display: flex; flex-direction: column; gap: 16px; }
+    .pilar {
+      display: flex; gap: 16px; align-items: flex-start; padding: 20px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--r); transition: all .3s;
+    }
+    .pilar:hover { background: rgba(200,169,81,.08); border-color: rgba(200,169,81,.2); }
+    .pilar-num     { font-size: 1.8rem; font-weight: 900; color: var(--gold); line-height: 1; min-width: 40px; }
+    .pilar-title   { font-size: .95rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .pilar-desc    { font-size: .84rem; color: var(--gray2); line-height: 1.6; }
+    .metodo-visual { display: flex; flex-direction: column; gap: 20px; }
+    .metodo-concept {
+      background: rgba(200,169,81,.1); border: 2px solid rgba(200,169,81,.3);
+      border-radius: var(--r); padding: 32px; text-align: center;
+    }
+    .metodo-concept-word { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; margin-bottom: 12px; }
+    .metodo-concept-desc { font-size: .88rem; color: var(--gray2); line-height: 1.7; }
+    .tbl-esg { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+    .tbl-item {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px; padding: 16px; text-align: center;
+    }
+    .tbl-item .letra  { font-size: 1.8rem; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+    .tbl-item .nombre { font-size: .72rem; color: var(--gray2); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .citas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+    .cita { background: rgba(255,255,255,.04); border-left: 3px solid var(--gold); border-radius: 0 var(--r) var(--r) 0; padding: 20px; }
+    .cita-text   { font-size: .84rem; color: var(--gray2); line-height: 1.7; font-style: italic; margin-bottom: 8px; }
+    .cita-author { font-size: .75rem; font-weight: 700; color: var(--gold); }
+
+    /* ── EQUIPO ── */
+    .equipo { background: #F1F5F9; }
+    .equipo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px,1fr)); gap: 28px; }
+    .miembro-card {
+      background: var(--white); border: 1px solid var(--gray3); border-radius: var(--r);
+      overflow: hidden; transition: all .3s; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .miembro-card:hover { box-shadow: var(--shadow); transform: translateY(-4px); }
+    .miembro-header {
+      background: linear-gradient(135deg, var(--navy), var(--navy3));
+      padding: 32px; display: flex; gap: 20px; align-items: center;
+    }
+    .miembro-avatar {
+      width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--gold);
+      background: rgba(200,169,81,.2); display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: var(--gold); font-weight: 700; flex-shrink: 0;
+      font-family: 'Playfair Display', serif;
+    }
+    .miembro-name { font-size: 1.15rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .miembro-role { font-size: .78rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .miembro-body { padding: 24px 28px; }
+    .miembro-bio  { font-size: .88rem; color: #475569; line-height: 1.7; margin-bottom: 16px; }
+    .miembro-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      background: rgba(43,125,50,.08); color: var(--green2); border: 1px solid rgba(43,125,50,.2);
+      padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 600;
+    }
+
+    /* ── HERRAMIENTAS ── */
+    .herr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 24px; }
+    .herr-card { border-radius: var(--r); overflow: hidden; border: 1px solid var(--gray3); transition: all .3s; }
+    .herr-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .herr-header { padding: 28px; background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%); }
+    .herr-header.gold   { background: linear-gradient(135deg, var(--navy2) 0%, var(--navy3) 100%); }
+    .herr-header.slate  { background: linear-gradient(135deg, #1A3A4A 0%, #1D3461 100%); }
+    .herr-icon  { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+    .herr-title { font-size: 1.15rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+    .herr-sub   { font-size: .8rem; color: rgba(255,255,255,.75); }
+    .herr-body  { padding: 24px 28px; background: var(--white); }
+    .herr-desc  { font-size: .88rem; color: #475569; line-height: 1.7; margin-bottom: 20px; }
+
+    /* ── CONTACTO ── */
+    .contacto {
+      background: linear-gradient(135deg, #0F2E1A 0%, var(--navy) 100%); color: var(--white);
+    }
+    .contacto .section-title    { color: var(--white); }
+    .contacto .section-subtitle { color: var(--gray2); }
+    .contacto .section-tag { background: rgba(43,125,50,.2); color: var(--green3); border-color: rgba(43,125,50,.35); }
+    .contacto-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 56px; align-items: start; }
+    .contacto-info { display: flex; flex-direction: column; gap: 24px; }
+    .contacto-item { display: flex; gap: 16px; align-items: flex-start; }
+    .contacto-item-icon {
+      width: 48px; height: 48px; background: rgba(200,169,81,.12); border: 1px solid rgba(200,169,81,.25);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .contacto-item-label { font-size: .72rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .contacto-item-value { font-size: .92rem; color: var(--gray2); }
+    .contacto-stats { display: flex; gap: 12px; flex-wrap: wrap; }
+    .contacto-stat {
+      flex: 1; min-width: 110px; text-align: center; border-radius: 10px; padding: 14px 12px;
+    }
+    .contacto-stat.gold  { background: rgba(200,169,81,.1); border: 1px solid rgba(200,169,81,.25); }
+    .contacto-stat.green { background: rgba(43,125,50,.1);  border: 1px solid rgba(43,125,50,.25); }
+    .contacto-stat-num   { font-size: 1.6rem; font-weight: 900; line-height: 1; }
+    .contacto-stat-label { font-size: .68rem; color: var(--gray); text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+    /* FORM */
+    .form { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--r); padding: 36px; }
+    .form-title { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: .76rem; font-weight: 600; color: var(--gray2); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .form-input {
+      width: 100%; background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.12);
+      border-radius: 8px; padding: 12px 16px; color: var(--white); font-size: .92rem;
+      font-family: inherit; transition: border-color .2s; outline: none;
+    }
+    .form-input:focus { border-color: var(--gold); }
+    .form-input::placeholder { color: rgba(255,255,255,.3); }
+    .form-input option { background: #152E0A; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── HERO MARK ── */
+    .hero-mark { display: block; color: var(--gold); margin-bottom: 28px; width: 68px; height: auto; filter: drop-shadow(0 0 16px rgba(200,169,81,.35)); }
+
+    /* ── METODO LOGO ── */
+    .metodo-logo-svg { width: 100%; max-width: 300px; height: auto; color: var(--gold); margin: 0 auto 20px; display: block; }
+
+    /* ── BRAND LOGO (secciones claras) ── */
+    .brand-logo-img { height: 56px; width: auto; display: block; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy); border-top: 1px solid rgba(200,169,81,.15); padding: 48px 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+    .footer-logo-svg { height: 48px; width: auto; color: #fff; }
+    .footer-copy  { font-size: .78rem; color: var(--gray); margin-top: 6px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-link  { font-size: .8rem; color: var(--gray); text-decoration: none; transition: color .2s; }
+    .footer-link:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-content, .metodo-grid, .contacto-grid { grid-template-columns: 1fr; gap: 36px; }
+      .citas-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none; position: fixed; top: 70px; left: 0; right: 0;
+        background: rgba(13,31,7,.98); flex-direction: column; padding: 16px; gap: 4px;
+        border-bottom: 1px solid rgba(200,169,81,.2);
+      }
+      .nav-links.open { display: flex; }
+      .nav-link { padding: 12px 16px; width: 100%; }
+      .nav-toggle { display: block; }
+      section { padding: 64px 20px; }
+      .equipo-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .form { padding: 24px; }
+    }
+
+    /* ── TENDENCIAS ── */
+    .tendencias { background: #F1F5F9; }
+    .tendencias .section-title { color: var(--navy); }
+    .news-header-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .news-live { display: flex; align-items: center; gap: 7px; font-size: .75rem; color: var(--green2); font-weight: 600; }
+    .news-dot { width: 8px; height: 8px; background: var(--green3); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    .news-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .news-tab {
+      background: var(--white); border: 1.5px solid var(--gray3); border-radius: 30px;
+      padding: 8px 18px; font-size: .8rem; font-weight: 600; color: #64748B;
+      cursor: pointer; transition: all .2s; white-space: nowrap; font-family: inherit;
+    }
+    .news-tab:hover  { border-color: var(--green2); color: var(--green2); }
+    .news-tab.activo { background: var(--green2); border-color: var(--green2); color: #fff; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; min-height: 220px; }
+    .news-card {
+      background: var(--white); border: 1px solid var(--gray3); border-radius: var(--r);
+      padding: 20px; text-decoration: none; display: flex; flex-direction: column; gap: 9px;
+      transition: all .25s; color: var(--text);
+    }
+    .news-card:hover { border-color: var(--green3); box-shadow: var(--shadow); transform: translateY(-3px); }
+    .news-card-img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; }
+    .news-card-source { font-size: .68rem; font-weight: 700; color: var(--green2); text-transform: uppercase; letter-spacing: .8px; }
+    .news-card-title { font-size: .88rem; font-weight: 600; color: var(--navy); line-height: 1.5; flex: 1; }
+    .news-card-date { font-size: .72rem; color: var(--gray); margin-top: auto; }
+    .news-loading { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--gray); }
+    .news-spinner { width: 36px; height: 36px; border: 3px solid var(--gray3); border-top-color: var(--green2); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .news-error { grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--gray); }
+    .news-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .news-status { font-size: .72rem; color: var(--gray); }
+    .news-refresh { background: none; border: 1px solid var(--gray3); border-radius: 20px; padding: 4px 12px; font-size: .72rem; color: var(--gray); cursor: pointer; font-family: inherit; transition: all .2s; }
+    .news-refresh:hover { border-color: var(--green2); color: var(--green2); }
+
+    /* ── GAMIFICACIÓN ── */
+    .gamificacion { background: linear-gradient(160deg, #0A1F07 0%, #0F2A10 50%, #152E0A 100%); color: var(--white); }
+    .gamificacion .section-title    { color: var(--white); }
+    .gamificacion .section-subtitle { color: var(--gray2); }
+    .gamificacion .section-tag { background: rgba(79,138,36,.18); color: var(--green3); border-color: rgba(79,138,36,.35); }
+    .game-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; margin-bottom: 36px; }
+    .game-feature {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--r); padding: 20px; display: flex; gap: 14px; align-items: flex-start;
+      transition: all .3s;
+    }
+    .game-feature:hover { background: rgba(200,169,81,.07); border-color: rgba(200,169,81,.2); }
+    .game-feature-icon  { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+    .game-feature-title { font-size: .95rem; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+    .game-feature-desc  { font-size: .82rem; color: var(--gray2); line-height: 1.6; }
+    .game-frame-wrap { border-radius: var(--r); overflow: hidden; border: 1px solid rgba(200,169,81,.3); box-shadow: 0 16px 64px rgba(0,0,0,.5); }
+    .game-frame-bar {
+      background: rgba(0,0,0,.4); border-bottom: 1px solid rgba(200,169,81,.2);
+      padding: 11px 18px; display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .game-frame-bar-label { font-size: .82rem; color: var(--gold); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .game-pulse { width: 8px; height: 8px; background: var(--green3); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    .game-frame { width: 100%; height: 540px; border: none; display: block; background: #0a0a0a; }
+
+    /* ── FADE-IN ── */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#inicio" class="nav-logo">
+      <div class="nav-logo-pill">
+        <img src="Logo-Projectability.png" alt="Project-Ability · Synergies Sustainability Projections" class="nav-logo-img">
+      </div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#inicio"      class="nav-link">Inicio</a>
+      <a href="#servicios"   class="nav-link">Servicios</a>
+      <a href="#metodologia" class="nav-link">Metodología</a>
+      <a href="#equipo"      class="nav-link">Equipo</a>
+      <a href="#herramientas"  class="nav-link">Herramientas</a>
+      <a href="#tendencias"   class="nav-link">Tendencias</a>
+      <a href="#gamificacion" class="nav-link">Gamificación</a>
+      <a href="#contacto"     class="nav-link nav-cta">Contacto</a>
+    </div>
+    <button class="nav-toggle" onclick="toggleNav()" aria-label="Menú">☰</button>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="inicio">
+  <div class="hero-content">
+    <div>
+      <div style="margin-bottom:28px;display:inline-block">
+        <div class="nav-logo-pill" style="padding:8px 16px">
+          <img src="Logo-Projectability.png" alt="Project-Ability" style="height:44px;width:auto;display:block">
+        </div>
+      </div>
+      <div class="hero-badge">Consultoría ESG · Sostenibilidad Corporativa</div>
+      <h1 class="hero-title">
+        Articulamos soluciones de <span>triple impacto</span> para su organización
+      </h1>
+      <p class="hero-subtitle">
+        Acompañamos empresas en la creación de estrategias sostenibles proyectables, integrando TBL-ESG para generar valor continuo a stakeholders, entorno y sociedad.
+      </p>
+      <div class="hero-actions">
+        <a href="#contacto"  class="btn btn-primary">Agendar consulta →</a>
+        <a href="#servicios" class="btn btn-outline">Ver servicios</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">20+</div>
+          <div class="hero-stat-label">Años de experiencia</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">TBL</div>
+          <div class="hero-stat-label">Triple Bottom Line</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">ESG</div>
+          <div class="hero-stat-label">Enfoque integral</div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">Nuestra Metodología</div>
+        <div class="hero-card-text">PROJECTABILITY integra estrategia organizacional con sostenibilidad para garantizar generación constante y creciente de valor a todos sus grupos de interés.</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-title">Alianzas Estratégicas</div>
+        <div class="hero-card-text">Conectamos gobierno, universidad y empresa para construir soluciones sostenibles con impacto real en los Objetivos de Desarrollo Sostenible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SERVICIOS ═══ -->
+<section class="servicios" id="servicios">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-tag">Áreas de Especialización</span>
+      <h2 class="section-title">Soluciones integrales para<br>la sostenibilidad de su empresa</h2>
+      <p class="section-subtitle">Un portafolio completo de servicios diseñados para transformar su organización hacia modelos de negocio sostenibles y rentables.</p>
+    </div>
+    <div class="servicios-grid">
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">🎯</span>
+        <h3 class="servicio-title">Estrategia Organizacional Sostenible</h3>
+        <p class="servicio-desc">Diseño e implementación de estrategias corporativas que integran la sostenibilidad como ventaja competitiva y fuente de valor a largo plazo.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">🤝</span>
+        <h3 class="servicio-title">Valor Compartido y ESG</h3>
+        <p class="servicio-desc">Alineación de objetivos empresariales con los ODS mediante marcos ESG que generan retorno económico y social simultáneamente.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">📊</span>
+        <h3 class="servicio-title">Gerencia de Proyectos</h3>
+        <p class="servicio-desc">Gestión profesional de proyectos de transformación con metodologías ágiles adaptadas al contexto de sostenibilidad corporativa.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">🔄</span>
+        <h3 class="servicio-title">Transformación Digital</h3>
+        <p class="servicio-desc">Digitalización de procesos y soluciones que optimizan recursos, reducen huella ambiental y mejoran la eficiencia operacional.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">🌿</span>
+        <h3 class="servicio-title">Gestión Ambiental y Social</h3>
+        <p class="servicio-desc">Identificación, evaluación y manejo de riesgos ambientales y sociales para proteger la licencia social de operación.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">🌍</span>
+        <h3 class="servicio-title">Cambio Climático y Economía Circular</h3>
+        <p class="servicio-desc">Estrategias de adaptación y mitigación climática e implementación de modelos de economía circular en la cadena de valor.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">📋</span>
+        <h3 class="servicio-title">Reportes de Sostenibilidad</h3>
+        <p class="servicio-desc">Elaboración de informes bajo estándares GRI, SASB y TCFD que fortalecen la transparencia y credibilidad corporativa ante stakeholders.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">👥</span>
+        <h3 class="servicio-title">Relacionamiento con Stakeholders</h3>
+        <p class="servicio-desc">Diseño de estrategias de diálogo y participación que construyen confianza y reducen riesgos reputacionales.</p>
+      </div>
+      <div class="servicio-card fade-in">
+        <span class="servicio-icon">⚖️</span>
+        <h3 class="servicio-title">Gestión Legal Ambiental</h3>
+        <p class="servicio-desc">Asesoría en cumplimiento normativo ambiental e identificación de incentivos tributarios para inversiones sostenibles en Colombia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METODOLOGÍA ═══ -->
+<section class="metodologia" id="metodologia">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-tag">Nuestra Metodología</span>
+      <h2 class="section-title">PROJECTABILITY:<br>Estrategia que proyecta valor</h2>
+      <p class="section-subtitle">Un enfoque innovador que integra sostenibilidad y estrategia para garantizar crecimiento continuo y proyectable de valor organizacional.</p>
+    </div>
+    <div class="metodo-grid fade-in">
+      <div class="metodo-pillars">
+        <div class="pilar">
+          <div class="pilar-num">01</div>
+          <div>
+            <div class="pilar-title">Diagnóstico Contextual</div>
+            <div class="pilar-desc">Analizamos las necesidades de su organización a la luz de las tendencias actuales del mercado y el entorno regulatorio global.</div>
+          </div>
+        </div>
+        <div class="pilar">
+          <div class="pilar-num">02</div>
+          <div>
+            <div class="pilar-title">Diseño Estratégico</div>
+            <div class="pilar-desc">Desarrollamos estrategias viables y aplicables que optimizan recursos y se alinean con marcos ESG y ODS internacionales.</div>
+          </div>
+        </div>
+        <div class="pilar">
+          <div class="pilar-num">03</div>
+          <div>
+            <div class="pilar-title">Implementación Digital</div>
+            <div class="pilar-desc">Digitalizamos soluciones para maximizar eficiencia, trazabilidad y escalabilidad de las estrategias diseñadas.</div>
+          </div>
+        </div>
+        <div class="pilar">
+          <div class="pilar-num">04</div>
+          <div>
+            <div class="pilar-title">Medición de Impacto</div>
+            <div class="pilar-desc">Monitoreamos resultados con indicadores claros que demuestran el valor generado para todos los grupos de interés.</div>
+          </div>
+        </div>
+      </div>
+      <div class="metodo-visual">
+        <div class="metodo-concept">
+          <div class="nav-logo-pill" style="padding:10px 20px;margin:0 auto 16px;display:inline-block">
+            <img src="Logo-Projectability.png" alt="Project-Ability" style="height:48px;width:auto;display:block">
+          </div>
+          <div class="metodo-concept-desc">
+            Proyección exponencial + Eficiencia incremental. Un marco que garantiza creación de valor continua, creciente y proyectable para stakeholders, entorno y sociedad, promoviendo filosofías de valor compartido.
+          </div>
+        </div>
+        <div class="tbl-esg">
+          <div class="tbl-item">
+            <div class="letra">E</div>
+            <div class="nombre">Environmental</div>
+          </div>
+          <div class="tbl-item">
+            <div class="letra">S</div>
+            <div class="nombre">Social</div>
+          </div>
+          <div class="tbl-item">
+            <div class="letra">G</div>
+            <div class="nombre">Governance</div>
+          </div>
+        </div>
+        <div class="citas-grid">
+          <div class="cita">
+            <div class="cita-text">"Yo quiero que la sostenibilidad sea un elemento intrínseco a nuestra estrategia"</div>
+            <div class="cita-author">— Phil Knight</div>
+          </div>
+          <div class="cita">
+            <div class="cita-text">"Hay que pasar de la RSE a la creación de valor compartido"</div>
+            <div class="cita-author">— Michael Porter</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EQUIPO ═══ -->
+<section class="equipo" id="equipo">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <span class="section-tag">Nuestro Equipo</span>
+      <h2 class="section-title">Expertos comprometidos con<br>su transformación sostenible</h2>
+      <p class="section-subtitle">Profesionales con más de 20 años de experiencia en sectores público y privado, reconocidos por organismos internacionales.</p>
+    </div>
+    <div class="equipo-grid fade-in">
+      <div class="miembro-card">
+        <div class="miembro-header">
+          <div class="miembro-avatar">DV</div>
+          <div>
+            <div class="miembro-name">Daniel Villa Vélez</div>
+            <div class="miembro-role">Cofundador · Director ESG</div>
+          </div>
+        </div>
+        <div class="miembro-body">
+          <p class="miembro-bio">Ingeniero Ambiental con MBA Ejecutivo y especialización en Gerencia de Proyectos y ESG. Con más de 20 años de experiencia en sectores público y privado, lidera la estructuración de estrategias de sostenibilidad corporativa en múltiples industrias.</p>
+          <div class="miembro-tags">
+            <span class="tag">Ingeniería Ambiental</span>
+            <span class="tag">MBA Ejecutivo</span>
+            <span class="tag">ESG</span>
+            <span class="tag">Gerencia de Proyectos</span>
+            <span class="tag">20+ años</span>
+          </div>
+        </div>
+      </div>
+      <div class="miembro-card">
+        <div class="miembro-header">
+          <div class="miembro-avatar">JM</div>
+          <div>
+            <div class="miembro-name">Juan Esteban Muñoz Velásquez</div>
+            <div class="miembro-role">Cofundador · Director Estratégico</div>
+          </div>
+        </div>
+        <div class="miembro-body">
+          <p class="miembro-bio">Ingeniero Ambiental especialista en gerencia de mercados globales y transformación digital. Reconocido por el Banco Mundial, cofundador de Portafolio Verde y Director Estratégico de Soluciones PAL. Más de 20 años en consultoría ESG con impacto internacional.</p>
+          <div class="miembro-tags">
+            <span class="tag">Ingeniería Ambiental</span>
+            <span class="tag">Mercados Globales</span>
+            <span class="tag">Transformación Digital</span>
+            <span class="tag">Banco Mundial</span>
+            <span class="tag">Portafolio Verde</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HERRAMIENTAS ═══ -->
+<section class="herramientas" id="herramientas">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <img src="Logo-Projectability.png" alt="Project-Ability" class="brand-logo-img" style="margin: 0 auto 24px;">
+      <span class="section-tag">Herramientas Digitales</span>
+      <h2 class="section-title">Tecnología al servicio de<br>su sostenibilidad</h2>
+      <p class="section-subtitle">Soluciones digitales para medir, gestionar y comunicar el valor sostenible de su organización.</p>
+    </div>
+    <div class="herr-grid fade-in">
+      <div class="herr-card">
+        <div class="herr-header">
+          <span class="herr-icon">📋</span>
+          <div class="herr-title">Assessment de Sostenibilidad</div>
+          <div class="herr-sub">Evaluación rápida organizacional</div>
+        </div>
+        <div class="herr-body">
+          <p class="herr-desc">Diagnóstico ágil del nivel de madurez en sostenibilidad de su organización. Identificamos brechas, oportunidades y prioridades de acción alineadas con estándares ESG internacionales.</p>
+          <a href="#contacto" class="btn btn-green">Solicitar assessment →</a>
+        </div>
+      </div>
+      <div class="herr-card">
+        <div class="herr-header gold">
+          <span class="herr-icon">📊</span>
+          <div class="herr-title">Dashboard de Resultados</div>
+          <div class="herr-sub">Visualización de indicadores en tiempo real</div>
+        </div>
+        <div class="herr-body">
+          <p class="herr-desc">Panel de control interactivo para monitorear indicadores clave de sostenibilidad, seguimiento de metas y reporte de progreso a stakeholders con datos actualizados.</p>
+          <a href="#contacto" class="btn btn-primary">Solicitar demo →</a>
+        </div>
+      </div>
+      <div class="herr-card">
+        <div class="herr-header slate">
+          <span class="herr-icon">✏️</span>
+          <div class="herr-title">Espacio Editorial</div>
+          <div class="herr-sub">Tendencias y pensamiento estratégico</div>
+        </div>
+        <div class="herr-body">
+          <p class="herr-desc">Contenido especializado sobre sostenibilidad, economía circular, cambio climático e innovación empresarial. Mantenemos a su organización actualizada sobre tendencias que impactan su sector.</p>
+          <a href="#contacto" class="btn btn-outline" style="color:var(--navy);border-color:var(--gray3);background:#F1F5F9">Suscribirse →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TENDENCIAS ═══ -->
+<section class="tendencias" id="tendencias">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="news-header-row">
+        <div>
+          <span class="section-tag">Actualidad Global</span>
+          <h2 class="section-title">Tendencias en<br>Sostenibilidad</h2>
+          <p class="section-subtitle">Noticias actualizadas diariamente sobre los temas que transforman el mundo de los negocios sostenibles.</p>
+        </div>
+        <div class="news-live">
+          <span class="news-dot"></span>
+          Actualización automática diaria
+        </div>
+      </div>
+      <div class="news-tabs">
+        <button class="news-tab activo" data-topic="circular"     onclick="loadNews('circular')">♻️ Economía Circular</button>
+        <button class="news-tab"        data-topic="esg"          onclick="loadNews('esg')">📊 ESG &amp; Sostenibilidad</button>
+        <button class="news-tab"        data-topic="ia"           onclick="loadNews('ia')">🤖 IA &amp; Medio Ambiente</button>
+        <button class="news-tab"        data-topic="ods"          onclick="loadNews('ods')">🌍 ODS &amp; Empresas</button>
+        <button class="news-tab"        data-topic="colombia"     onclick="loadNews('colombia')">🇨🇴 Colombia Verde</button>
+      </div>
+    </div>
+
+    <div id="newsGrid" class="news-grid fade-in"></div>
+
+    <div class="news-footer">
+      <span id="newsStatus" class="news-status"></span>
+      <button class="news-refresh" onclick="refreshNews()">↻ Actualizar</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GAMIFICACIÓN ═══ -->
+<section class="gamificacion" id="gamificacion">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <span class="section-tag">Conciencia Ambiental · Gamificación</span>
+      <h2 class="section-title">Aprender sostenibilidad<br>jugando</h2>
+      <p class="section-subtitle">La gamificación es uno de los métodos más efectivos para generar cambios de comportamiento duraderos. <strong style="color:var(--gold)">Ciclo Urbano</strong> lleva la conciencia ambiental a la práctica de forma interactiva, divertida y memorable.</p>
+    </div>
+
+    <div class="game-features fade-in">
+      <div class="game-feature">
+        <div class="game-feature-icon">🌱</div>
+        <div>
+          <div class="game-feature-title">3 Niveles Progresivos</div>
+          <div class="game-feature-desc">Campo, ciudad y clasificación — dificultad creciente que refleja la complejidad del reciclaje en entornos reales.</div>
+        </div>
+      </div>
+      <div class="game-feature">
+        <div class="game-feature-icon">♻️</div>
+        <div>
+          <div class="game-feature-title">Separación de Residuos</div>
+          <div class="game-feature-desc">El jugador aprende a clasificar materiales en contenedores específicos, replicando buenas prácticas ambientales.</div>
+        </div>
+      </div>
+      <div class="game-feature">
+        <div class="game-feature-icon">🧠</div>
+        <div>
+          <div class="game-feature-title">Aprendizaje Significativo</div>
+          <div class="game-feature-desc">La experiencia lúdica crea conexiones emocionales que aumentan la retención y promueven cambios de comportamiento reales.</div>
+        </div>
+      </div>
+      <div class="game-feature">
+        <div class="game-feature-icon">🏆</div>
+        <div>
+          <div class="game-feature-title">Motivación Continua</div>
+          <div class="game-feature-desc">Sistema de puntuación, vidas y niveles que incentivan la repetición y el aprendizaje progresivo sobre sostenibilidad urbana.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-frame-wrap fade-in">
+      <div class="game-frame-bar">
+        <div class="game-frame-bar-label">
+          <span class="game-pulse"></span>
+          🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad
+        </div>
+        <a href="https://amdavil.github.io/Recicla-runner-3.0/" target="_blank" rel="noopener" class="btn btn-green" style="padding:7px 16px;font-size:.8rem">
+          Pantalla completa ↗
+        </a>
+      </div>
+      <iframe
+        src="https://amdavil.github.io/Recicla-runner-3.0/"
+        class="game-frame"
+        title="Ciclo Urbano - Juego educativo de reciclaje"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <p class="text-center fade-in" style="margin-top:24px;font-size:.84rem;color:var(--gray);line-height:1.7">
+      ¿Quiere integrar soluciones de gamificación para sensibilización ambiental en su organización?
+      <a href="#contacto" style="color:var(--gold);font-weight:600"> Contáctenos →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ CONTACTO ═══ -->
+<section class="contacto" id="contacto">
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="section-tag">Contacto</span>
+      <h2 class="section-title">¿Listo para transformar<br>su organización?</h2>
+      <p class="section-subtitle">Cuéntenos sobre su empresa y exploraremos juntos cómo PROJECTABILITY puede generar valor sostenible para su organización.</p>
+    </div>
+    <div class="contacto-grid fade-in">
+      <div class="contacto-info">
+        <div class="contacto-item">
+          <div class="contacto-item-icon">📍</div>
+          <div>
+            <div class="contacto-item-label">Ubicación</div>
+            <div class="contacto-item-value">Colombia<br>Servicio a toda Latinoamérica</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="contacto-item-icon">🌐</div>
+          <div>
+            <div class="contacto-item-label">Especialización</div>
+            <div class="contacto-item-value">Consultoría ESG · Sostenibilidad<br>Estrategia Corporativa · ODS</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="contacto-item-icon">🤝</div>
+          <div>
+            <div class="contacto-item-label">Primera Consulta</div>
+            <div class="contacto-item-value">Diagnóstico inicial sin costo<br>para nuevos clientes</div>
+          </div>
+        </div>
+        <p style="font-size:.88rem;color:var(--gray2);line-height:1.7">
+          Respondemos en menos de 24 horas hábiles. Nuestro equipo analizará su consulta y le propondrá los próximos pasos.
+        </p>
+        <div class="contacto-stats">
+          <div class="contacto-stat gold">
+            <div class="contacto-stat-num" style="color:var(--gold)">20+</div>
+            <div class="contacto-stat-label">Años de trayectoria</div>
+          </div>
+          <div class="contacto-stat green">
+            <div class="contacto-stat-num" style="color:var(--green3)">ESG</div>
+            <div class="contacto-stat-label">Enfoque certificado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form">
+        <div class="form-title">Envíenos un mensaje</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre *</label>
+            <input type="text" class="form-input" placeholder="Su nombre">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Empresa</label>
+            <input type="text" class="form-input" placeholder="Nombre de la empresa">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-input" placeholder="correo@empresa.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sector</label>
+            <select class="form-input">
+              <option value="">Seleccionar sector</option>
+              <option>Energía</option>
+              <option>Manufactura</option>
+              <option>Minería</option>
+              <option>Construcción</option>
+              <option>Financiero</option>
+              <option>Agroindustria</option>
+              <option>Retail</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Servicio de interés</label>
+          <select class="form-input">
+            <option value="">¿En qué podemos ayudarle?</option>
+            <option>Estrategia Organizacional Sostenible</option>
+            <option>Assessment de Sostenibilidad</option>
+            <option>Reportes ESG / Sostenibilidad</option>
+            <option>Gestión de Riesgos Ambientales</option>
+            <option>Economía Circular</option>
+            <option>Transformación Digital</option>
+            <option>Otro / Consulta general</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mensaje *</label>
+          <textarea class="form-input" rows="4" placeholder="Cuéntenos sobre su organización y sus objetivos de sostenibilidad..."></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="enviarFormulario(this)">
+          Enviar mensaje →
+        </button>
+        <p style="font-size:.72rem;color:var(--gray);text-align:center;margin-top:12px">Sus datos son tratados con absoluta confidencialidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#inicio" style="display:inline-block">
+        <div class="nav-logo-pill" style="padding:8px 16px">
+          <img src="Logo-Projectability.png" alt="Project-Ability · Synergies Sustainability Projections" style="height:44px;width:auto;display:block">
+        </div>
+      </a>
+      <div class="footer-copy">© 2026 Synergies Projections. Todos los derechos reservados.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#inicio"      class="footer-link">Inicio</a>
+      <a href="#servicios"   class="footer-link">Servicios</a>
+      <a href="#metodologia" class="footer-link">Metodología</a>
+      <a href="#equipo"      class="footer-link">Equipo</a>
+      <a href="#contacto"    class="footer-link">Contacto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('.nav-link').forEach(l =>
+    l.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'))
+  );
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').style.borderBottomColor =
+      window.scrollY > 50 ? 'rgba(200,169,81,.4)' : 'rgba(200,169,81,.2)';
+
+    let current = '';
+    document.querySelectorAll('section[id]').forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    document.querySelectorAll('.nav-link').forEach(l => {
+      l.style.color = '';
+      if (l.getAttribute('href') === '#' + current && !l.classList.contains('nav-cta'))
+        l.style.color = 'var(--gold)';
+    });
+  });
+
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // ══════════════════════════════════════════
+  // NOTICIAS — carga automática por tema
+  // ══════════════════════════════════════════
+  const NEWS_TOPICS = {
+    circular:  { label: '♻️ Economía Circular',      q: 'economia circular reciclaje residuos sostenibilidad empresas' },
+    esg:       { label: '📊 ESG & Sostenibilidad',    q: 'ESG sostenibilidad corporativa reporte ambiental social' },
+    ia:        { label: '🤖 IA & Medio Ambiente',     q: 'inteligencia artificial sostenibilidad medio ambiente energia' },
+    ods:       { label: '🌍 ODS & Empresas',          q: 'objetivos desarrollo sostenible empresas impacto social ODS' },
+    colombia:  { label: '🇨🇴 Colombia Verde',         q: 'sostenibilidad Colombia medio ambiente empresas verdes' },
+  };
+
+  let currentTopic = 'circular';
+
+  function getCacheKey(topicId) {
+    return `news_${topicId}_${new Date().toISOString().split('T')[0]}`;
+  }
+
+  function fmtDate(str) {
+    try {
+      return new Date(str).toLocaleDateString('es-CO', { day:'numeric', month:'short', year:'numeric' });
+    } catch { return str; }
+  }
+
+  function cleanTitle(title) {
+    return title.replace(/\s-\s[^-]+$/, '').replace(/\s–\s[^–]+$/, '').trim();
+  }
+
+  function buildCards(items) {
+    return items.slice(0, 9).map(item => {
+      const source = (item.author || '').replace(/,.*$/, '').trim() || 'Fuente';
+      const title  = cleanTitle(item.title);
+      const date   = fmtDate(item.pubDate);
+      const img    = item.thumbnail
+        ? `<img src="${item.thumbnail}" class="news-card-img" alt="" loading="lazy" onerror="this.remove()">`
+        : '';
+      return `<a href="${item.link}" target="_blank" rel="noopener noreferrer" class="news-card">
+        ${img}
+        <div class="news-card-source">${source}</div>
+        <div class="news-card-title">${title}</div>
+        <div class="news-card-date">📅 ${date}</div>
+      </a>`;
+    }).join('');
+  }
+
+  async function loadNews(topicId) {
+    currentTopic = topicId;
+
+    // Activar tab
+    document.querySelectorAll('.news-tab').forEach(t =>
+      t.classList.toggle('activo', t.dataset.topic === topicId)
+    );
+
+    const grid   = document.getElementById('newsGrid');
+    const status = document.getElementById('newsStatus');
+
+    // Usar caché del día si existe
+    const cacheKey = getCacheKey(topicId);
+    const cached   = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      grid.innerHTML = cached;
+      status.textContent = '✓ Noticias del día · desde caché';
+      return;
+    }
+
+    // Mostrar spinner
+    grid.innerHTML = `<div class="news-loading">
+      <div class="news-spinner"></div>
+      Cargando noticias actualizadas…
+    </div>`;
+    status.textContent = '';
+
+    const topic  = NEWS_TOPICS[topicId];
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(topic.q)}&hl=es&gl=CO&ceid=CO:es`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=9`;
+
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 12000);
+      const res   = await fetch(apiUrl, { signal: controller.signal });
+      clearTimeout(timer);
+      const data  = await res.json();
+
+      if (data.status === 'ok' && data.items?.length) {
+        const html = buildCards(data.items);
+        grid.innerHTML = html;
+        sessionStorage.setItem(cacheKey, html);
+        status.textContent = `✓ ${data.items.length} artículos · ${new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit' })}`;
+      } else {
+        throw new Error('sin resultados');
+      }
+    } catch (err) {
+      const msg = err.name === 'AbortError' ? 'Tiempo de espera agotado.' : 'No se pudo conectar al servicio.';
+      grid.innerHTML = `<div class="news-error">
+        <div style="font-size:2rem;margin-bottom:10px">🔌</div>
+        <p style="margin-bottom:14px">${msg} Verifique su conexión e intente de nuevo.</p>
+        <button class="news-refresh" onclick="loadNews('${topicId}')">↻ Reintentar</button>
+      </div>`;
+      status.textContent = '⚠ Error al cargar noticias.';
+    }
+  }
+
+  function refreshNews() {
+    // Borrar caché del tema actual y recargar
+    sessionStorage.removeItem(getCacheKey(currentTopic));
+    loadNews(currentTopic);
+  }
+
+  // Carga inicial al entrar en el viewport (lazy)
+  const newsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        loadNews('circular');
+        newsObs.disconnect();
+      }
+    });
+  }, { threshold: 0.1 });
+  const newsSection = document.getElementById('tendencias');
+  if (newsSection) newsObs.observe(newsSection);
+
+  function enviarFormulario(btn) {
+    const form = btn.closest('.form');
+    const nombre  = form.querySelector('input[placeholder="Su nombre"]').value.trim();
+    const email   = form.querySelector('input[placeholder="correo@empresa.com"]').value.trim();
+    const mensaje = form.querySelector('textarea').value.trim();
+    if (!nombre || !email || !mensaje) {
+      btn.textContent = '⚠ Complete los campos requeridos';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.innerHTML = 'Enviar mensaje →'; btn.style.background = ''; }, 3000);
+      return;
+    }
+    btn.innerHTML = '✓ Mensaje enviado — le contactaremos pronto';
+    btn.style.background = '#16A34A';
+    btn.disabled = true;
+  }
+</script>
+</body>
+</html>
