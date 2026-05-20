@@ -374,6 +374,64 @@
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
     .game-frame { width: 100%; height: 540px; border: none; display: block; background: #0a0a0a; }
 
+    /* ── GAME LAUNCHER ── */
+    .game-launcher { display: flex; justify-content: center; padding: 40px 24px 8px; }
+    .game-app-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+      cursor: pointer; text-align: center; background: none; border: none;
+    }
+    .game-app-icon {
+      width: 130px; height: 130px;
+      background: linear-gradient(145deg, #1b6610 0%, #2d8c14 45%, #5aab2a 80%, #a3c95b 100%);
+      border-radius: 30px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(79,138,36,.45), 0 0 0 1px rgba(200,169,81,.25);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .game-app-btn:hover .game-app-icon {
+      transform: scale(1.07) translateY(-5px);
+      box-shadow: 0 18px 56px rgba(79,138,36,.65), 0 0 0 2px rgba(200,169,81,.5);
+    }
+    .game-app-icon-inner { font-size: 3.8rem; line-height: 1; filter: drop-shadow(0 2px 6px rgba(0,0,0,.35)); }
+    .game-app-play {
+      position: absolute; bottom: -13px; right: -13px;
+      width: 40px; height: 40px;
+      background: var(--gold); border-radius: 50%; border: 3px solid #0F2A10;
+      display: flex; align-items: center; justify-content: center;
+      color: #0D1F07; font-size: .95rem; font-weight: 900;
+      box-shadow: 0 3px 12px rgba(0,0,0,.5);
+    }
+    .game-app-title { font-size: 1.6rem; font-weight: 800; color: var(--white); letter-spacing: -.02em; }
+    .game-app-tagline { font-size: .92rem; color: var(--gray2); max-width: 300px; line-height: 1.6; }
+    .game-app-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,169,81,.12); border: 1px solid rgba(200,169,81,.3);
+      border-radius: 100px; padding: 12px 30px;
+      font-size: .86rem; font-weight: 600; color: var(--gold);
+      transition: all .2s;
+    }
+    .game-app-btn:hover .game-app-cta { background: rgba(200,169,81,.22); border-color: var(--gold); }
+
+    /* ── YOUTUBE ── */
+    .yt-contact-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,0,0,.1); border: 1px solid rgba(255,80,80,.3);
+      border-radius: 10px; padding: 10px 18px; margin-top: 8px;
+      color: #ff6b6b; text-decoration: none; font-size: .84rem; font-weight: 600;
+      transition: all .2s;
+    }
+    .yt-contact-btn:hover { background: rgba(255,0,0,.2); border-color: rgba(255,80,80,.6); }
+    .footer-social { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
+    .footer-social-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px; padding: 9px 16px;
+      color: var(--gray2); text-decoration: none; font-size: .8rem; font-weight: 500;
+      transition: all .2s;
+    }
+    .footer-social-btn.yt:hover { background: rgba(255,0,0,.15); border-color: rgba(255,80,80,.5); color: #ff6b6b; }
+
     /* ── FADE-IN ── */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -757,7 +815,21 @@
       </div>
     </div>
 
-    <div class="game-frame-wrap fade-in">
+    <!-- Launcher visible por defecto -->
+    <div class="game-launcher fade-in" id="gameLauncher">
+      <button class="game-app-btn" onclick="launchGame()" aria-label="Jugar Ciclo Urbano">
+        <div class="game-app-icon">
+          <span class="game-app-icon-inner">♻️</span>
+          <div class="game-app-play">▶</div>
+        </div>
+        <div class="game-app-title">Ciclo Urbano</div>
+        <div class="game-app-tagline">Generando cultura de economía circular</div>
+        <div class="game-app-cta">▶ &nbsp;Jugar ahora</div>
+      </button>
+    </div>
+
+    <!-- Frame oculto hasta hacer clic -->
+    <div class="game-frame-wrap fade-in" id="gameFrameWrap" style="display:none">
       <div class="game-frame-bar">
         <div class="game-frame-bar-label">
           <span class="game-pulse"></span>
@@ -768,11 +840,10 @@
         </a>
       </div>
       <iframe
-        src="https://amdavil.github.io/Recicla-runner-3.0/"
+        id="gameIframe"
         class="game-frame"
         title="Ciclo Urbano - Juego educativo de reciclaje"
-        allowfullscreen
-        loading="lazy">
+        allowfullscreen>
       </iframe>
     </div>
 
@@ -812,6 +883,19 @@
           <div>
             <div class="contacto-item-label">Primera Consulta</div>
             <div class="contacto-item-value">Diagnóstico inicial sin costo<br>para nuevos clientes</div>
+          </div>
+        </div>
+        <div class="contacto-item">
+          <div class="contacto-item-icon" style="color:#ff4444">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          </div>
+          <div>
+            <div class="contacto-item-label">Canal YouTube</div>
+            <div class="contacto-item-value">Contenido sobre sostenibilidad,<br>ESG y economía circular</div>
+            <a href="https://www.youtube.com/channel/UCvo9fq68lLpQgCgSGUxzA1Q" target="_blank" rel="noopener" class="yt-contact-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+              Ver canal →
+            </a>
           </div>
         </div>
         <p style="font-size:.88rem;color:var(--gray2);line-height:1.7">
@@ -897,6 +981,12 @@
         </div>
       </a>
       <div class="footer-copy">© 2026 Synergies Projections. Todos los derechos reservados.</div>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/channel/UCvo9fq68lLpQgCgSGUxzA1Q" target="_blank" rel="noopener" class="footer-social-btn yt" title="Canal YouTube">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+          YouTube
+        </a>
+      </div>
     </div>
     <div class="footer-links">
       <a href="#inicio"      class="footer-link">Inicio</a>
@@ -909,6 +999,19 @@
 </footer>
 
 <script>
+  function launchGame() {
+    const launcher = document.getElementById('gameLauncher');
+    const wrap = document.getElementById('gameFrameWrap');
+    launcher.style.transition = 'opacity .3s';
+    launcher.style.opacity = '0';
+    setTimeout(() => {
+      launcher.style.display = 'none';
+      wrap.style.display = 'block';
+      requestAnimationFrame(() => wrap.classList.add('visible'));
+      document.getElementById('gameIframe').src = 'https://amdavil.github.io/Recicla-runner-3.0/';
+    }, 300);
+  }
+
   function toggleNav() {
     document.getElementById('navLinks').classList.toggle('open');
   }
