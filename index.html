@@ -503,6 +503,61 @@
     }
     .footer-social-btn.yt:hover { background: rgba(255,0,0,.15); border-color: rgba(255,80,80,.5); color: #ff6b6b; }
 
+    /* ── MODAL REGISTRO ASSESSMENT ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(5,15,3,.82); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: #fff; border-radius: 20px; width: 100%; max-width: 480px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.4);
+      overflow: hidden; transform: translateY(20px);
+      transition: transform .3s;
+    }
+    .modal-overlay.active .modal-box { transform: translateY(0); }
+    .modal-header {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
+      padding: 28px 32px 24px; text-align: center;
+    }
+    .modal-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+    .modal-title { font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .modal-sub { font-size: .85rem; color: rgba(255,255,255,.8); line-height: 1.5; }
+    .modal-body { padding: 28px 32px 32px; }
+    .modal-field { margin-bottom: 16px; }
+    .modal-label {
+      display: block; font-size: .72rem; font-weight: 700; color: #475569;
+      text-transform: uppercase; letter-spacing: .6px; margin-bottom: 7px;
+    }
+    .modal-input {
+      width: 100%; border: 1.5px solid #E2E8F0; border-radius: 9px;
+      padding: 11px 15px; font-size: .92rem; color: #1E293B;
+      font-family: inherit; outline: none; transition: border-color .2s;
+      box-sizing: border-box;
+    }
+    .modal-input:focus { border-color: var(--green2); }
+    .modal-btn {
+      width: 100%; background: var(--green); color: #fff; border: none;
+      border-radius: 10px; padding: 14px; font-size: .95rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; margin-top: 8px;
+      transition: background .2s, transform .2s;
+      box-shadow: 0 4px 16px rgba(45,80,22,.3);
+    }
+    .modal-btn:hover { background: var(--green2); transform: translateY(-1px); }
+    .modal-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .modal-close {
+      position: absolute; top: 14px; right: 18px;
+      background: rgba(255,255,255,.2); border: none; color: #fff;
+      width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,.35); }
+    .modal-privacy { font-size: .72rem; color: #94A3B8; text-align: center; margin-top: 12px; line-height: 1.5; }
+
     /* ── FADE-IN ── */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -1126,10 +1181,100 @@
   </div>
 </footer>
 
+<!-- ═══ MODAL REGISTRO ASSESSMENT ═══ -->
+<div class="modal-overlay" id="assessmentModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <div class="modal-header" style="position:relative">
+      <button class="modal-close" onclick="closeAssessmentModal()" aria-label="Cerrar">✕</button>
+      <span class="modal-icon">🌿</span>
+      <div class="modal-title" id="modalTitle">Acceso al Assessment ESG · IA</div>
+      <div class="modal-sub">Regístrese para acceder a su diagnóstico gratuito de sostenibilidad con inteligencia artificial.</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label class="modal-label">Nombre completo *</label>
+        <input type="text" class="modal-input" id="regNombre" placeholder="Su nombre completo">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Empresa *</label>
+        <input type="text" class="modal-input" id="regEmpresa" placeholder="Nombre de su organización">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Correo corporativo *</label>
+        <input type="email" class="modal-input" id="regEmail" placeholder="correo@empresa.com">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Cargo / Rol</label>
+        <input type="text" class="modal-input" id="regCargo" placeholder="Ej: Gerente de Sostenibilidad">
+      </div>
+      <button class="modal-btn" id="regBtn" onclick="submitRegistration()">
+        Acceder al Assessment →
+      </button>
+      <p class="modal-privacy">🔒 Sus datos son tratados con absoluta confidencialidad y no serán compartidos con terceros. Le contactaremos únicamente con información relevante sobre sostenibilidad.</p>
+    </div>
+  </div>
+</div>
+
 <script>
+  // ── IDs de Formspree (reemplazar con los IDs reales tras crear las forms) ──
+  const FORMSPREE_CONTACTO    = 'https://formspree.io/f/CONTACTO_ID';
+  const FORMSPREE_REGISTRO    = 'https://formspree.io/f/REGISTRO_ID';
+
+  // ── MODAL ASSESSMENT ──
   function launchAssessment() {
+    document.getElementById('assessmentModal').classList.add('active');
+    document.getElementById('regNombre').focus();
+  }
+
+  function closeAssessmentModal() {
+    document.getElementById('assessmentModal').classList.remove('active');
+  }
+
+  // Cerrar modal al hacer clic fuera
+  document.getElementById('assessmentModal').addEventListener('click', function(e) {
+    if (e.target === this) closeAssessmentModal();
+  });
+
+  async function submitRegistration() {
+    const nombre  = document.getElementById('regNombre').value.trim();
+    const empresa = document.getElementById('regEmpresa').value.trim();
+    const email   = document.getElementById('regEmail').value.trim();
+    const cargo   = document.getElementById('regCargo').value.trim();
+    const btn     = document.getElementById('regBtn');
+
+    if (!nombre || !empresa || !email) {
+      btn.textContent = '⚠ Complete los campos obligatorios';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.textContent = 'Acceder al Assessment →'; btn.style.background = ''; }, 2500);
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      btn.textContent = '⚠ Ingrese un correo válido';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.textContent = 'Acceder al Assessment →'; btn.style.background = ''; }, 2500);
+      return;
+    }
+
+    btn.textContent = 'Procesando...';
+    btn.disabled = true;
+
+    try {
+      await fetch(FORMSPREE_REGISTRO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `Nuevo registro Assessment — ${empresa}`,
+          nombre, empresa, email, cargo,
+          tipo: 'Registro Assessment ESG'
+        })
+      });
+    } catch(e) { /* si falla el envío igual dejamos pasar */ }
+
+    closeAssessmentModal();
+
+    // Lanzar el assessment
     const launcher = document.getElementById('assessmentLauncher');
-    const wrap = document.getElementById('assessmentFrameWrap');
+    const wrap     = document.getElementById('assessmentFrameWrap');
     launcher.style.transition = 'opacity .3s';
     launcher.style.opacity = '0';
     setTimeout(() => {
@@ -1306,20 +1451,54 @@
   const newsSection = document.getElementById('tendencias');
   if (newsSection) newsObs.observe(newsSection);
 
-  function enviarFormulario(btn) {
-    const form = btn.closest('.form');
+  async function enviarFormulario(btn) {
+    const form    = btn.closest('.form');
     const nombre  = form.querySelector('input[placeholder="Su nombre"]').value.trim();
+    const empresa = form.querySelector('input[placeholder="Nombre de la empresa"]').value.trim();
     const email   = form.querySelector('input[placeholder="correo@empresa.com"]').value.trim();
+    const sector  = form.querySelectorAll('select')[0].value;
+    const servicio= form.querySelectorAll('select')[1].value;
     const mensaje = form.querySelector('textarea').value.trim();
+
     if (!nombre || !email || !mensaje) {
       btn.textContent = '⚠ Complete los campos requeridos';
       btn.style.background = '#DC2626';
       setTimeout(() => { btn.innerHTML = 'Enviar mensaje →'; btn.style.background = ''; }, 3000);
       return;
     }
-    btn.innerHTML = '✓ Mensaje enviado — le contactaremos pronto';
-    btn.style.background = '#16A34A';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      btn.textContent = '⚠ Ingrese un correo válido';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.innerHTML = 'Enviar mensaje →'; btn.style.background = ''; }, 3000);
+      return;
+    }
+
+    btn.innerHTML = '⏳ Enviando...';
     btn.disabled = true;
+
+    try {
+      const res = await fetch(FORMSPREE_CONTACTO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `Contacto web — ${nombre} (${empresa || 'sin empresa'})`,
+          _replyto: email,
+          nombre, empresa, email, sector, servicio, mensaje,
+          tipo: 'Contacto web Projectability'
+        })
+      });
+      if (res.ok) {
+        btn.innerHTML = '✓ Mensaje enviado — le contactaremos pronto';
+        btn.style.background = '#16A34A';
+      } else {
+        throw new Error('error');
+      }
+    } catch(e) {
+      btn.innerHTML = '⚠ Error al enviar. Escríbanos a daniel.villa@projectability.net';
+      btn.style.background = '#DC2626';
+      btn.disabled = false;
+      setTimeout(() => { btn.innerHTML = 'Enviar mensaje →'; btn.style.background = ''; }, 5000);
+    }
   }
 </script>
 </body>
