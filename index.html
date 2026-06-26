@@ -385,6 +385,88 @@
       .form { padding: 24px; }
     }
 
+    /* ── FORMACIÓN ESTRATÉGICA ── */
+    .formacion { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 50%, var(--navy3) 100%); color: var(--white); }
+    .formacion .section-title    { color: var(--white); }
+    .formacion .section-subtitle { color: var(--gray2); }
+    .formacion .section-tag { background: rgba(200,169,81,.15); color: var(--gold); border-color: rgba(200,169,81,.3); }
+    .talleres-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 24px; }
+    .taller-card {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r); overflow: hidden; transition: all .3s;
+    }
+    .taller-card:hover { border-color: rgba(200,169,81,.3); box-shadow: 0 8px 40px rgba(0,0,0,.3); transform: translateY(-4px); }
+    .taller-header {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
+      padding: 28px; position: relative; display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .taller-icon { font-size: 2.8rem; line-height: 1; }
+    .taller-badge {
+      background: rgba(79,138,36,.9); color: #fff; font-size: .68rem; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: .5px;
+    }
+    .taller-badge.pronto { background: rgba(200,169,81,.85); color: var(--navy); }
+    .taller-body { padding: 24px 28px; }
+    .taller-title { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+    .taller-desc { font-size: .86rem; color: var(--gray2); line-height: 1.7; margin-bottom: 16px; }
+    .taller-meta { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .taller-meta-item { font-size: .78rem; color: var(--gray); font-weight: 500; }
+    .taller-btn { width: 100%; justify-content: center; }
+
+    /* Modal talleres */
+    .taller-modal-overlay {
+      position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.7); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center; padding: 24px;
+    }
+    .taller-modal-overlay.open { display: flex; }
+    .taller-modal {
+      background: linear-gradient(135deg, #0F2A10, var(--navy2)); border: 1px solid rgba(200,169,81,.3);
+      border-radius: 16px; padding: 40px; max-width: 440px; width: 100%; position: relative;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    }
+    .taller-modal-close {
+      position: absolute; top: 14px; right: 18px; background: none; border: none;
+      color: var(--gray); font-size: 1.6rem; cursor: pointer; transition: color .2s; line-height: 1;
+    }
+    .taller-modal-close:hover { color: var(--white); }
+    .taller-modal-icon { font-size: 2.8rem; text-align: center; margin-bottom: 12px; }
+    .taller-modal-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--white); text-align: center; margin-bottom: 8px; }
+    .taller-modal-desc { font-size: .86rem; color: var(--gray2); text-align: center; line-height: 1.7; margin-bottom: 24px; }
+
+    /* ── GAME CATALOG ── */
+    .game-catalog-title {
+      font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700;
+      color: var(--gold); text-align: center; margin-bottom: 32px;
+      letter-spacing: .5px;
+    }
+    .game-catalog { display: flex; flex-direction: column; gap: 28px; }
+    .game-card {
+      display: grid; grid-template-columns: auto 1fr; gap: 36px; align-items: center;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--r); padding: 32px; transition: all .3s;
+    }
+    .game-card:hover { border-color: rgba(200,169,81,.3); box-shadow: 0 8px 40px rgba(0,0,0,.3); }
+    .game-card-visual { display: flex; justify-content: center; align-items: center; }
+    .game-card-info { display: flex; flex-direction: column; gap: 14px; }
+    .game-card-name { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--white); }
+    .game-card-label {
+      display: inline-block; font-size: .68rem; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+    }
+    .game-card-purpose p, .game-card-how p { font-size: .86rem; color: var(--gray2); line-height: 1.7; margin: 0; }
+    .game-card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .game-card-tag {
+      background: rgba(200,169,81,.1); border: 1px solid rgba(200,169,81,.25);
+      color: var(--gold); padding: 4px 12px; border-radius: 20px;
+      font-size: .72rem; font-weight: 600;
+    }
+    .game-card-play-btn { width: fit-content; margin-top: 4px; }
+    @media (max-width: 768px) {
+      .game-card { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 20px; }
+      .game-card-tags { justify-content: center; }
+      .game-card-play-btn { width: 100%; justify-content: center; }
+    }
+
     /* ── TENDENCIAS ── */
     .tendencias { background: #F1F5F9; }
     .tendencias .section-title { color: var(--navy); }
@@ -580,6 +662,7 @@
       <a href="#equipo"      class="nav-link">Equipo</a>
       <a href="#herramientas"  class="nav-link">Herramientas</a>
       <a href="#assessment"   class="nav-link">Assessment</a>
+      <a href="#formacion"    class="nav-link">Formación</a>
       <a href="#tendencias"   class="nav-link">Tendencias</a>
       <a href="#gamificacion" class="nav-link">Gamificación</a>
       <a href="#contacto"     class="nav-link nav-cta">Contacto</a>
@@ -944,6 +1027,94 @@
   </div>
 </section>
 
+<!-- ═══ FORMACIÓN ESTRATÉGICA ═══ -->
+<section class="formacion" id="formacion">
+  <div class="container">
+    <div class="section-header center fade-in">
+      <span class="section-tag">Capacitación Corporativa</span>
+      <h2 class="section-title">Formación Estratégica<br>en Sostenibilidad</h2>
+      <p class="section-subtitle">Talleres virtuales diseñados para fortalecer las capacidades de su equipo en sostenibilidad, ESG y estrategia corporativa responsable.</p>
+    </div>
+    <div class="talleres-grid fade-in">
+
+      <div class="taller-card">
+        <div class="taller-header">
+          <span class="taller-icon">📐</span>
+          <div class="taller-badge">Disponible</div>
+        </div>
+        <div class="taller-body">
+          <h3 class="taller-title">Fundamentos ESG para Líderes</h3>
+          <p class="taller-desc">Comprenda los pilares Environmental, Social y Governance y cómo integrarlos en la toma de decisiones estratégicas de su organización.</p>
+          <div class="taller-meta">
+            <span class="taller-meta-item">🕐 2 horas</span>
+            <span class="taller-meta-item">📄 Certificado</span>
+          </div>
+          <button class="btn btn-primary taller-btn" onclick="openTallerGate(this, 'fundamentos-esg')">Acceder al taller →</button>
+        </div>
+      </div>
+
+      <div class="taller-card">
+        <div class="taller-header" style="background:linear-gradient(135deg, #1A3A4A 0%, #1D3461 100%)">
+          <span class="taller-icon">📊</span>
+          <div class="taller-badge pronto">Próximamente</div>
+        </div>
+        <div class="taller-body">
+          <h3 class="taller-title">Reportes de Sostenibilidad GRI</h3>
+          <p class="taller-desc">Aprenda a elaborar informes bajo estándares GRI que fortalecen la transparencia y credibilidad corporativa ante sus stakeholders.</p>
+          <div class="taller-meta">
+            <span class="taller-meta-item">🕐 3 horas</span>
+            <span class="taller-meta-item">📄 Certificado</span>
+          </div>
+          <button class="btn btn-primary taller-btn" disabled style="opacity:.5;cursor:not-allowed">Próximamente</button>
+        </div>
+      </div>
+
+      <div class="taller-card">
+        <div class="taller-header" style="background:linear-gradient(135deg, #3A1A0A 0%, #5A2D0E 100%)">
+          <span class="taller-icon">🔄</span>
+          <div class="taller-badge pronto">Próximamente</div>
+        </div>
+        <div class="taller-body">
+          <h3 class="taller-title">Economía Circular en la Práctica</h3>
+          <p class="taller-desc">Estrategias concretas para implementar modelos de economía circular en su cadena de valor y reducir la huella ambiental.</p>
+          <div class="taller-meta">
+            <span class="taller-meta-item">🕐 2.5 horas</span>
+            <span class="taller-meta-item">📄 Certificado</span>
+          </div>
+          <button class="btn btn-primary taller-btn" disabled style="opacity:.5;cursor:not-allowed">Próximamente</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Modal de registro para talleres -->
+<div class="taller-modal-overlay" id="tallerModal">
+  <div class="taller-modal">
+    <button class="taller-modal-close" onclick="closeTallerGate()">&times;</button>
+    <div class="taller-modal-icon">🎓</div>
+    <h3 class="taller-modal-title">Regístrese para acceder</h3>
+    <p class="taller-modal-desc">Ingrese sus datos para acceder al taller virtual. Recibirá también material complementario en su correo.</p>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--gray2)">Nombre completo *</label>
+      <input type="text" class="form-input" id="tallerNombre" placeholder="Su nombre completo">
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--gray2)">Correo electrónico *</label>
+      <input type="email" class="form-input" id="tallerEmail" placeholder="correo@empresa.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:var(--gray2)">Empresa (opcional)</label>
+      <input type="text" class="form-input" id="tallerEmpresa" placeholder="Nombre de su empresa">
+    </div>
+    <button class="btn btn-primary" id="tallerSubmitBtn" style="width:100%;justify-content:center;padding:14px" onclick="submitTallerGate()">
+      Acceder al taller →
+    </button>
+    <p style="font-size:.72rem;color:var(--gray);text-align:center;margin-top:12px">Sus datos son tratados con absoluta confidencialidad.</p>
+  </div>
+</div>
+
 <!-- ═══ TENDENCIAS ═══ -->
 <section class="tendencias" id="tendencias">
   <div class="container">
@@ -980,27 +1151,14 @@
 <!-- ═══ GAMIFICACIÓN ═══ -->
 <section class="gamificacion" id="gamificacion">
   <div class="container">
+    <!-- Intro general -->
     <div class="section-header center fade-in">
       <span class="section-tag">Conciencia Ambiental · Gamificación</span>
       <h2 class="section-title">Aprender sostenibilidad<br>jugando</h2>
-      <p class="section-subtitle">La gamificación es uno de los métodos más efectivos para generar cambios de comportamiento duraderos. <strong style="color:var(--gold)">Ciclo Urbano</strong> lleva la conciencia ambiental a la práctica de forma interactiva, divertida y memorable.</p>
+      <p class="section-subtitle">La gamificación es una de las herramientas más poderosas para generar cambios de comportamiento duraderos. Mediante experiencias lúdicas e interactivas, convertimos conceptos de sostenibilidad en hábitos reales.</p>
     </div>
 
     <div class="game-features fade-in">
-      <div class="game-feature">
-        <div class="game-feature-icon">🌱</div>
-        <div>
-          <div class="game-feature-title">3 Niveles Progresivos</div>
-          <div class="game-feature-desc">Campo, ciudad y clasificación — dificultad creciente que refleja la complejidad del reciclaje en entornos reales.</div>
-        </div>
-      </div>
-      <div class="game-feature">
-        <div class="game-feature-icon">♻️</div>
-        <div>
-          <div class="game-feature-title">Separación de Residuos</div>
-          <div class="game-feature-desc">El jugador aprende a clasificar materiales en contenedores específicos, replicando buenas prácticas ambientales.</div>
-        </div>
-      </div>
       <div class="game-feature">
         <div class="game-feature-icon">🧠</div>
         <div>
@@ -1012,22 +1170,88 @@
         <div class="game-feature-icon">🏆</div>
         <div>
           <div class="game-feature-title">Motivación Continua</div>
-          <div class="game-feature-desc">Sistema de puntuación, vidas y niveles que incentivan la repetición y el aprendizaje progresivo sobre sostenibilidad urbana.</div>
+          <div class="game-feature-desc">Sistemas de puntuación, niveles y retos que incentivan la repetición y el aprendizaje progresivo sobre sostenibilidad.</div>
+        </div>
+      </div>
+      <div class="game-feature">
+        <div class="game-feature-icon">📈</div>
+        <div>
+          <div class="game-feature-title">Impacto Medible</div>
+          <div class="game-feature-desc">Cada juego refuerza competencias ambientales específicas que pueden integrarse en programas de formación corporativa.</div>
+        </div>
+      </div>
+      <div class="game-feature">
+        <div class="game-feature-icon">🌱</div>
+        <div>
+          <div class="game-feature-title">Del Juego a la Acción</div>
+          <div class="game-feature-desc">Las mecánicas interactivas traducen conceptos abstractos de sostenibilidad en prácticas cotidianas aplicables.</div>
         </div>
       </div>
     </div>
 
-    <!-- Launcher visible por defecto -->
-    <div class="game-launcher fade-in" id="gameLauncher">
-      <button class="game-app-btn" onclick="launchGame()" aria-label="Jugar Ciclo Urbano">
-        <div class="game-app-icon">
-          <span class="game-app-icon-inner">♻️</span>
-          <div class="game-app-play">▶</div>
+    <!-- Catálogo de juegos -->
+    <h3 class="game-catalog-title fade-in">Nuestros Juegos</h3>
+
+    <div class="game-catalog fade-in">
+
+      <!-- Juego 1: Ciclo Urbano -->
+      <div class="game-card" id="gameCard-ciclo">
+        <div class="game-card-visual">
+          <button class="game-app-btn" onclick="launchGame('ciclo')" aria-label="Jugar Ciclo Urbano">
+            <div class="game-app-icon">
+              <span class="game-app-icon-inner">♻️</span>
+              <div class="game-app-play">▶</div>
+            </div>
+          </button>
         </div>
-        <div class="game-app-title">Ciclo Urbano</div>
-        <div class="game-app-tagline">Generando cultura de economía circular</div>
-        <div class="game-app-cta">▶ &nbsp;Jugar ahora</div>
-      </button>
+        <div class="game-card-info">
+          <h4 class="game-card-name">Ciclo Urbano</h4>
+          <div class="game-card-purpose">
+            <span class="game-card-label">Propósito</span>
+            <p>Generar cultura de economía circular y enseñar la correcta separación de residuos sólidos en entornos urbanos y rurales.</p>
+          </div>
+          <div class="game-card-how">
+            <span class="game-card-label">¿Cómo se juega?</span>
+            <p>Avanza por 3 niveles progresivos — campo, ciudad y clasificación — recogiendo residuos y depositándolos en el contenedor correcto. Cada nivel aumenta la velocidad y la complejidad, reflejando los desafíos reales del reciclaje.</p>
+          </div>
+          <div class="game-card-tags">
+            <span class="game-card-tag">♻️ Reciclaje</span>
+            <span class="game-card-tag">🏙️ 3 Niveles</span>
+            <span class="game-card-tag">⚡ Acción</span>
+          </div>
+          <button class="btn btn-primary game-card-play-btn" onclick="launchGame('ciclo')">▶ &nbsp;Jugar Ciclo Urbano</button>
+        </div>
+      </div>
+
+      <!-- Juego 2: EcoGuardián -->
+      <div class="game-card" id="gameCard-eco">
+        <div class="game-card-visual">
+          <button class="game-app-btn" onclick="launchGame('eco')" aria-label="Jugar EcoGuardián">
+            <div class="game-app-icon" style="background:linear-gradient(145deg, #0e5a8a 0%, #1480b5 45%, #2bb5e0 80%, #7ed6f0 100%);box-shadow:0 8px 40px rgba(20,128,181,.45), 0 0 0 1px rgba(200,169,81,.25)">
+              <span class="game-app-icon-inner">🌍</span>
+              <div class="game-app-play">▶</div>
+            </div>
+          </button>
+        </div>
+        <div class="game-card-info">
+          <h4 class="game-card-name">EcoGuardián</h4>
+          <div class="game-card-purpose">
+            <span class="game-card-label">Propósito</span>
+            <p>Concientizar sobre el consumo responsable de agua y energía en espacios cotidianos. Un hogar promedio desperdicia el 30% de estos recursos por descuidos diarios.</p>
+          </div>
+          <div class="game-card-how">
+            <span class="game-card-label">¿Cómo se juega?</span>
+            <p>Explora entornos interactivos — hogar y oficina — buscando fugas de agua y energía antes de que termine el tiempo. Apaga luces, cierra grifos y desconecta aparatos para salvar el planeta.</p>
+          </div>
+          <div class="game-card-tags">
+            <span class="game-card-tag">💧 Agua</span>
+            <span class="game-card-tag">⚡ Energía</span>
+            <span class="game-card-tag">🔍 Exploración</span>
+          </div>
+          <button class="btn btn-primary game-card-play-btn" onclick="launchGame('eco')">▶ &nbsp;Jugar EcoGuardián</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- Frame oculto hasta hacer clic -->
@@ -1035,21 +1259,26 @@
       <div class="game-frame-bar">
         <div class="game-frame-bar-label">
           <span class="game-pulse"></span>
-          🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad
+          <span id="gameFrameTitle">🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad</span>
         </div>
-        <a href="https://amdavil.github.io/Recicla-runner-3.0/" target="_blank" rel="noopener" class="btn btn-green" style="padding:7px 16px;font-size:.8rem">
-          Pantalla completa ↗
-        </a>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-outline" style="padding:7px 16px;font-size:.8rem;border-color:rgba(255,255,255,.3)" onclick="backToLaunchers()">
+            ← Volver
+          </button>
+          <a id="gameFullscreenLink" href="#" target="_blank" rel="noopener" class="btn btn-green" style="padding:7px 16px;font-size:.8rem">
+            Pantalla completa ↗
+          </a>
+        </div>
       </div>
       <iframe
         id="gameIframe"
         class="game-frame"
-        title="Ciclo Urbano - Juego educativo de reciclaje"
+        title="Juego educativo de sostenibilidad"
         allowfullscreen>
       </iframe>
     </div>
 
-    <p class="text-center fade-in" style="margin-top:24px;font-size:.84rem;color:var(--gray);line-height:1.7">
+    <p class="text-center fade-in" style="margin-top:32px;font-size:.84rem;color:var(--gray);line-height:1.7">
       ¿Quiere integrar soluciones de gamificación para sensibilización ambiental en su organización?
       <a href="#contacto" style="color:var(--gold);font-weight:600"> Contáctenos →</a>
     </p>
@@ -1195,6 +1424,7 @@
       <a href="#servicios"   class="footer-link">Servicios</a>
       <a href="#metodologia" class="footer-link">Metodología</a>
       <a href="#equipo"      class="footer-link">Equipo</a>
+      <a href="#formacion"   class="footer-link">Formación</a>
       <a href="#contacto"    class="footer-link">Contacto</a>
     </div>
   </div>
@@ -1305,17 +1535,41 @@
     }, 300);
   }
 
-  function launchGame() {
-    const launcher = document.getElementById('gameLauncher');
+  const GAMES = {
+    ciclo: {
+      url: 'https://amdavil.github.io/Recicla-runner-3.0/',
+      title: '🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad'
+    },
+    eco: {
+      url: 'https://amdavil.github.io/eco-guardian-game/',
+      title: '🌍 EcoGuardián — Salva el Planeta'
+    }
+  };
+
+  function launchGame(id) {
+    const game = GAMES[id];
+    const catalog = document.querySelector('.game-catalog');
     const wrap = document.getElementById('gameFrameWrap');
-    launcher.style.transition = 'opacity .3s';
-    launcher.style.opacity = '0';
+    catalog.style.transition = 'opacity .3s';
+    catalog.style.opacity = '0';
     setTimeout(() => {
-      launcher.style.display = 'none';
+      catalog.style.display = 'none';
       wrap.style.display = 'block';
       requestAnimationFrame(() => wrap.classList.add('visible'));
-      document.getElementById('gameIframe').src = 'https://amdavil.github.io/Recicla-runner-3.0/';
+      document.getElementById('gameFrameTitle').textContent = game.title;
+      document.getElementById('gameFullscreenLink').href = game.url;
+      document.getElementById('gameIframe').src = game.url;
     }, 300);
+  }
+
+  function backToLaunchers() {
+    const catalog = document.querySelector('.game-catalog');
+    const wrap = document.getElementById('gameFrameWrap');
+    wrap.style.display = 'none';
+    wrap.classList.remove('visible');
+    document.getElementById('gameIframe').src = '';
+    catalog.style.display = 'flex';
+    requestAnimationFrame(() => { catalog.style.opacity = '1'; });
   }
 
   function toggleNav() {
@@ -1469,6 +1723,65 @@
   }, { threshold: 0.1 });
   const newsSection = document.getElementById('tendencias');
   if (newsSection) newsObs.observe(newsSection);
+
+  // ══════════════════════════════════════════
+  // TALLERES — modal de registro
+  // ══════════════════════════════════════════
+  let currentTallerId = null;
+
+  function openTallerGate(btn, tallerId) {
+    currentTallerId = tallerId;
+    document.getElementById('tallerModal').classList.add('open');
+    document.getElementById('tallerNombre').focus();
+  }
+
+  function closeTallerGate() {
+    document.getElementById('tallerModal').classList.remove('open');
+    currentTallerId = null;
+    const btn = document.getElementById('tallerSubmitBtn');
+    btn.innerHTML = 'Acceder al taller →';
+    btn.style.background = '';
+    btn.disabled = false;
+  }
+
+  document.getElementById('tallerModal').addEventListener('click', function(e) {
+    if (e.target === this) closeTallerGate();
+  });
+
+  function submitTallerGate() {
+    const nombre = document.getElementById('tallerNombre').value.trim();
+    const email  = document.getElementById('tallerEmail').value.trim();
+    const btn    = document.getElementById('tallerSubmitBtn');
+
+    if (!nombre || !email) {
+      btn.textContent = '⚠ Complete nombre y correo';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.innerHTML = 'Acceder al taller →'; btn.style.background = ''; }, 3000);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      btn.textContent = '⚠ Correo no válido';
+      btn.style.background = '#DC2626';
+      setTimeout(() => { btn.innerHTML = 'Acceder al taller →'; btn.style.background = ''; }, 3000);
+      return;
+    }
+
+    btn.innerHTML = '✓ Registro exitoso — abriendo taller...';
+    btn.style.background = '#16A34A';
+    btn.disabled = true;
+
+    const registro = { nombre, email, empresa: document.getElementById('tallerEmpresa').value.trim(), taller: currentTallerId, fecha: new Date().toISOString() };
+    const registros = JSON.parse(localStorage.getItem('talleres_registros') || '[]');
+    registros.push(registro);
+    localStorage.setItem('talleres_registros', JSON.stringify(registros));
+
+    setTimeout(() => {
+      closeTallerGate();
+      alert('¡Gracias ' + nombre + '! El taller se habilitará próximamente. Le notificaremos a ' + email + ' cuando esté disponible.');
+    }, 1500);
+  }
 
   async function enviarFormulario(btn) {
     const form    = btn.closest('.form');
