@@ -1072,7 +1072,7 @@
       <div class="taller-card">
         <div class="taller-header" style="background:linear-gradient(135deg, #3A1A0A 0%, #5A2D0E 100%)">
           <span class="taller-icon">🔄</span>
-          <div class="taller-badge pronto">Próximamente</div>
+          <div class="taller-badge">Disponible</div>
         </div>
         <div class="taller-body">
           <h3 class="taller-title">Economía Circular en la Práctica</h3>
@@ -1081,7 +1081,7 @@
             <span class="taller-meta-item">🕐 2.5 horas</span>
             <span class="taller-meta-item">📄 Certificado</span>
           </div>
-          <button class="btn btn-primary taller-btn" disabled style="opacity:.5;cursor:not-allowed">Próximamente</button>
+          <button class="btn btn-primary taller-btn" onclick="openTallerGate(this, 'economia-circular')">Acceder al taller →</button>
         </div>
       </div>
 
@@ -1762,6 +1762,15 @@
   // ══════════════════════════════════════════
   let currentTallerId = null;
 
+  // Talleres con contenido real: al registrarse, se abre este enlace.
+  // Los talleres que no aparecen aquí siguen mostrando el aviso de "próximamente".
+  const TALLER_URLS = {
+    'economia-circular': 'https://fundamentosec.vercel.app/'
+  };
+  const TALLER_NAMES = {
+    'economia-circular': 'Economía Circular en la Práctica'
+  };
+
   function openTallerGate(btn, tallerId) {
     currentTallerId = tallerId;
     document.getElementById('tallerModal').classList.add('open');
@@ -1781,7 +1790,7 @@
     if (e.target === this) closeTallerGate();
   });
 
-  function submitTallerGate() {
+  async function submitTallerGate() {
     const nombre = document.getElementById('tallerNombre').value.trim();
     const email  = document.getElementById('tallerEmail').value.trim();
     const btn    = document.getElementById('tallerSubmitBtn');
@@ -1801,18 +1810,38 @@
       return;
     }
 
-    btn.innerHTML = '✓ Registro exitoso — abriendo taller...';
+    const tallerUrl  = TALLER_URLS[currentTallerId];
+    const tallerName = TALLER_NAMES[currentTallerId] || currentTallerId;
+    const empresa    = document.getElementById('tallerEmpresa').value.trim();
+
+    btn.innerHTML = tallerUrl ? '✓ Registro exitoso — abriendo taller...' : '✓ Registro exitoso...';
     btn.style.background = '#16A34A';
     btn.disabled = true;
 
-    const registro = { nombre, email, empresa: document.getElementById('tallerEmpresa').value.trim(), taller: currentTallerId, fecha: new Date().toISOString() };
+    const registro = { nombre, email, empresa, taller: currentTallerId, fecha: new Date().toISOString() };
     const registros = JSON.parse(localStorage.getItem('talleres_registros') || '[]');
     registros.push(registro);
     localStorage.setItem('talleres_registros', JSON.stringify(registros));
 
+    try {
+      await fetch(FORMSPREE_REGISTRO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `Nuevo registro Taller — ${tallerName}`,
+          nombre, empresa, email,
+          tipo: 'Registro Taller Formación Estratégica'
+        })
+      });
+    } catch (e) { /* si falla el envío igual dejamos pasar al taller */ }
+
     setTimeout(() => {
       closeTallerGate();
-      alert('¡Gracias ' + nombre + '! El taller se habilitará próximamente. Le notificaremos a ' + email + ' cuando esté disponible.');
+      if (tallerUrl) {
+        window.open(tallerUrl, '_blank', 'noopener');
+      } else {
+        alert('¡Gracias ' + nombre + '! El taller se habilitará próximamente. Le notificaremos a ' + email + ' cuando esté disponible.');
+      }
     }, 1500);
   }
 
