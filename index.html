@@ -1252,6 +1252,35 @@
         </div>
       </div>
 
+      <!-- Juego 3: Guardián del Agua -->
+      <div class="game-card" id="gameCard-agua">
+        <div class="game-card-visual">
+          <button class="game-app-btn" onclick="launchGame('agua')" aria-label="Jugar Guardián del Agua">
+            <div class="game-app-icon" style="background:linear-gradient(145deg, #1b5e20 0%, #2e7d32 40%, #4fc3f7 80%, #81d4fa 100%);box-shadow:0 8px 40px rgba(46,125,50,.45), 0 0 0 1px rgba(200,169,81,.25)">
+              <span class="game-app-icon-inner">💧</span>
+              <div class="game-app-play">▶</div>
+            </div>
+          </button>
+        </div>
+        <div class="game-card-info">
+          <h4 class="game-card-name">Guardián del Agua</h4>
+          <div class="game-card-purpose">
+            <span class="game-card-label">Propósito</span>
+            <p>Crear conciencia sobre el cuidado de los árboles y ecosistemas para conservar las fuentes de agua. Los bosques actúan como esponjas naturales que regulan el ciclo del agua y recargan los acuíferos.</p>
+          </div>
+          <div class="game-card-how">
+            <span class="game-card-label">¿Cómo se juega?</span>
+            <p>Protege un manantial de dos leñadores que talan árboles sin control. Ahuyéntalos para salvar los árboles y siembra nuevos mientras crecen, manteniendo el nivel de agua durante 5 días.</p>
+          </div>
+          <div class="game-card-tags">
+            <span class="game-card-tag">💧 Agua</span>
+            <span class="game-card-tag">🌳 Reforestación</span>
+            <span class="game-card-tag">🛡️ Defensa</span>
+          </div>
+          <button class="btn btn-primary game-card-play-btn" onclick="launchGame('agua')">▶ &nbsp;Jugar Guardián del Agua</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- Frame oculto hasta hacer clic -->
@@ -1543,6 +1572,10 @@
     eco: {
       url: 'https://amdavil.github.io/eco-guardian-game/',
       title: '🌍 EcoGuardián — Salva el Planeta'
+    },
+    agua: {
+      url: 'https://amdavil.github.io/herramientas-y-assessment/guardian-del-agua.html',
+      title: '💧🌳 Guardián del Agua — Protege el Manantial'
     }
   };
 
