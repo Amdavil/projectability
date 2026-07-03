@@ -1674,8 +1674,10 @@
       </a>`).join('');
   }
 
+  const RSS2JSON_KEY = 'hppipf0s3xb2egmmjghwm17dhadvqslx0ogqjs8x';
+
   async function fetchNews(rssUrl) {
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=9`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=9&api_key=${RSS2JSON_KEY}`;
     const ctrl   = new AbortController();
     const timer  = setTimeout(() => ctrl.abort(), 10000);
     const res    = await fetch(apiUrl, { signal: ctrl.signal });
