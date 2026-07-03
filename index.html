@@ -1653,13 +1653,6 @@
     colombia: { q: 'sostenibilidad Colombia medio ambiente empresas verdes' },
   };
 
-  // Proxies CORS con parseo XML nativo — sin APIs de terceros con límites
-  const PROXIES = [
-    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-    u => `https://thingproxy.freeboard.io/fetch/${encodeURIComponent(u)}`,
-  ];
-
   let currentTopic = 'circular';
 
   function getCacheKey(id) {
@@ -1671,47 +1664,35 @@
     catch { return ''; }
   }
 
-  function txt(el, sel) { return el.querySelector(sel)?.textContent?.trim() || ''; }
-
-  function parseXML(xmlText) {
-    const xml   = new DOMParser().parseFromString(xmlText, 'text/xml');
-    const items = [...xml.querySelectorAll('item')].slice(0, 9);
-    return items.map(item => {
-      const rawTitle = txt(item, 'title');
-      // Google News añade " - Fuente" al final del título
-      const dashIdx  = rawTitle.lastIndexOf(' - ');
-      const title    = dashIdx > 20 ? rawTitle.slice(0, dashIdx) : rawTitle;
-      const source   = dashIdx > 20 ? rawTitle.slice(dashIdx + 3) : txt(item, 'source');
-      const link     = txt(item, 'link') || item.querySelector('link')?.getAttribute('href') || '#';
-      const date     = fmtDate(txt(item, 'pubDate'));
-      return { title, source, link, date };
-    });
-  }
-
   function buildCards(articles) {
     if (!articles.length) return '<div class="news-error">No se encontraron artículos.</div>';
     return articles.map(a => `
       <a href="${a.link}" target="_blank" rel="noopener noreferrer" class="news-card">
-        <div class="news-card-source">${a.source || 'Fuente'}</div>
+        <div class="news-card-source">${a.author || 'Fuente'}</div>
         <div class="news-card-title">${a.title}</div>
-        <div class="news-card-date">📅 ${a.date}</div>
+        <div class="news-card-date">📅 ${fmtDate(a.pubDate)}</div>
       </a>`).join('');
   }
 
-  async function fetchWithProxy(rssUrl) {
-    for (const makeProxy of PROXIES) {
-      try {
-        const ctrl  = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), 9000);
-        const res   = await fetch(makeProxy(rssUrl), { signal: ctrl.signal });
-        clearTimeout(timer);
-        if (!res.ok) continue;
-        const text  = await res.text();
-        const items = parseXML(text);
-        if (items.length) return items;
-      } catch { /* intentar siguiente proxy */ }
-    }
-    throw new Error('Sin conexión');
+  async function fetchNews(rssUrl) {
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=9`;
+    const ctrl   = new AbortController();
+    const timer  = setTimeout(() => ctrl.abort(), 10000);
+    const res    = await fetch(apiUrl, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error('Error API');
+    const data = await res.json();
+    if (data.status !== 'ok' || !data.items?.length) throw new Error('Sin artículos');
+    return data.items.map(item => {
+      // Google News añade " - Fuente" al final del título
+      const dashIdx = item.title.lastIndexOf(' - ');
+      return {
+        title:   dashIdx > 20 ? item.title.slice(0, dashIdx) : item.title,
+        author:  dashIdx > 20 ? item.title.slice(dashIdx + 3) : (item.author || ''),
+        link:    item.link,
+        pubDate: item.pubDate,
+      };
+    });
   }
 
   async function loadNews(topicId) {
@@ -1739,7 +1720,7 @@
     const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es&gl=CO&ceid=CO:es`;
 
     try {
-      const articles = await fetchWithProxy(rssUrl);
+      const articles = await fetchNews(rssUrl);
       const html     = buildCards(articles);
       grid.innerHTML = html;
       sessionStorage.setItem(key, html);
