@@ -481,14 +481,12 @@
     .news-header-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
     .news-live { display: flex; align-items: center; gap: 7px; font-size: .75rem; color: var(--green2); font-weight: 600; }
     .news-dot { width: 8px; height: 8px; background: var(--green3); border-radius: 50%; animation: pulse 1.5s ease-in-out infinite; }
-    .news-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
-    .news-tab {
+    .news-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+    .news-tag {
       background: var(--white); border: 1.5px solid var(--gray3); border-radius: 30px;
-      padding: 8px 18px; font-size: .8rem; font-weight: 600; color: #64748B;
-      cursor: pointer; transition: all .2s; white-space: nowrap; font-family: inherit;
+      padding: 6px 16px; font-size: .8rem; font-weight: 600; color: #64748B;
+      white-space: nowrap;
     }
-    .news-tab:hover  { border-color: var(--green2); color: var(--green2); }
-    .news-tab.activo { background: var(--green2); border-color: var(--green2); color: #fff; }
     .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 16px; min-height: 220px; }
     .news-card {
       background: var(--white); border: 1px solid var(--gray3); border-radius: var(--r);
@@ -1138,12 +1136,12 @@
           Actualización automática diaria
         </div>
       </div>
-      <div class="news-tabs">
-        <button class="news-tab activo" data-topic="circular"     onclick="loadNews('circular')">♻️ Economía Circular</button>
-        <button class="news-tab"        data-topic="esg"          onclick="loadNews('esg')">📊 ESG &amp; Sostenibilidad</button>
-        <button class="news-tab"        data-topic="ia"           onclick="loadNews('ia')">🤖 IA &amp; Medio Ambiente</button>
-        <button class="news-tab"        data-topic="ods"          onclick="loadNews('ods')">🌍 ODS &amp; Empresas</button>
-        <button class="news-tab"        data-topic="colombia"     onclick="loadNews('colombia')">🇨🇴 Colombia Verde</button>
+      <div class="news-tags">
+        <span class="news-tag">♻️ Economía Circular</span>
+        <span class="news-tag">📊 ESG</span>
+        <span class="news-tag">🤖 IA & Sostenibilidad</span>
+        <span class="news-tag">🌍 ODS</span>
+        <span class="news-tag">🇨🇴 Colombia Verde</span>
       </div>
     </div>
 
@@ -1645,15 +1643,9 @@
   // ══════════════════════════════════════════
   // NOTICIAS — carga automática por tema
   // ══════════════════════════════════════════
-  const NEWS_TOPICS = {
-    circular: { q: 'economia circular reciclaje residuos sostenibilidad empresas' },
-    esg:      { q: 'ESG sostenibilidad corporativa reporte ambiental social' },
-    ia:       { q: 'inteligencia artificial sostenibilidad medio ambiente energia' },
-    ods:      { q: 'objetivos desarrollo sostenible empresas impacto social ODS' },
-    colombia: { q: 'sostenibilidad Colombia medio ambiente empresas verdes' },
-  };
+  const NEWS_QUERY = 'sostenibilidad ESG economia circular inteligencia artificial medio ambiente empresas Colombia ODS';
 
-  let currentTopic = 'circular';
+  let currentTopic = 'all';
 
   function getCacheKey(id) {
     return `news_${id}_${new Date().toISOString().split('T')[0]}`;
@@ -1699,10 +1691,6 @@
 
   async function loadNews(topicId) {
     currentTopic = topicId;
-    document.querySelectorAll('.news-tab').forEach(t =>
-      t.classList.toggle('activo', t.dataset.topic === topicId)
-    );
-
     const grid   = document.getElementById('newsGrid');
     const status = document.getElementById('newsStatus');
 
@@ -1718,8 +1706,7 @@
     grid.innerHTML = `<div class="news-loading"><div class="news-spinner"></div>Cargando noticias…</div>`;
     status.textContent = '';
 
-    const q      = NEWS_TOPICS[topicId].q;
-    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es&gl=CO&ceid=CO:es`;
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(NEWS_QUERY)}&hl=es&gl=CO&ceid=CO:es`;
 
     try {
       const articles = await fetchNews(rssUrl);
@@ -1738,13 +1725,13 @@
   }
 
   function refreshNews() {
-    sessionStorage.removeItem(getCacheKey(currentTopic));
-    loadNews(currentTopic);
+    sessionStorage.removeItem(getCacheKey('all'));
+    loadNews('all');
   }
 
   // Carga lazy al hacer scroll hasta la sección
   const newsObs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { loadNews('circular'); newsObs.disconnect(); } });
+    entries.forEach(e => { if (e.isIntersecting) { loadNews('all'); newsObs.disconnect(); } });
   }, { threshold: 0.1 });
   const newsSection = document.getElementById('tendencias');
   if (newsSection) newsObs.observe(newsSection);
