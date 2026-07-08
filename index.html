@@ -1606,7 +1606,8 @@
       wrap.style.display = 'block';
       requestAnimationFrame(() => wrap.classList.add('visible'));
       document.getElementById('assessmentIframe').src =
-        'https://amdavil.github.io/herramientas-y-assessment/assessment_sostenibilidad_ia.html';
+        'https://amdavil.github.io/herramientas-y-assessment/assessment_sostenibilidad_ia.html' +
+        '?nombre=' + encodeURIComponent(nombre) + '&empresa=' + encodeURIComponent(empresa) + '&email=' + encodeURIComponent(email);
     }, 300);
   }
 
