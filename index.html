@@ -238,6 +238,22 @@
       background: rgba(95,141,62,.08); color: var(--green2); border: 1px solid rgba(95,141,62,.2);
       padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 600;
     }
+    .equipo-resumen {
+      background: linear-gradient(135deg, var(--navy), var(--navy3));
+      border-radius: var(--r); padding: 48px 40px; text-align: center;
+      cursor: pointer; transition: transform .3s, box-shadow .3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08); user-select: none;
+    }
+    .equipo-resumen:hover, .equipo-resumen:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow-lg); outline: none; }
+    .equipo-resumen-avatars { display: flex; justify-content: center; margin-bottom: 22px; }
+    .equipo-resumen-avatars .miembro-avatar { margin: 0 -14px; box-shadow: 0 0 0 4px var(--navy); }
+    .equipo-resumen-text { color: var(--white); font-size: 1.02rem; line-height: 1.75; max-width: 680px; margin: 0 auto 24px; }
+    .equipo-resumen-text strong { color: var(--gold2); }
+    .equipo-resumen-hint {
+      display: inline-flex; align-items: center; gap: 8px; background: rgba(200,169,81,.15);
+      border: 1px solid rgba(200,169,81,.35); color: var(--gold2); padding: 10px 22px;
+      border-radius: 999px; font-size: .82rem; font-weight: 600;
+    }
 
     /* ── ASSESSMENT ── */
     .assessment { background: linear-gradient(160deg, #F8FAFF 0%, #EEF4FF 50%, #F0FAF0 100%); }
@@ -660,7 +676,7 @@
   <div class="nav-inner">
     <a href="#inicio" class="nav-logo">
       <div class="nav-logo-pill">
-        <img src="LOGO SIN FONDO_AZUL.png" alt="Soluciones PAL" class="nav-logo-img">
+        <img src="Logo-Projectability.png" alt="Project-Ability · Synergies Sustainability Projections" class="nav-logo-img">
       </div>
     </a>
     <div class="nav-links" id="navLinks">
@@ -873,7 +889,22 @@
       <h2 class="section-title">Expertos comprometidos con<br>su transformación sostenible</h2>
       <p class="section-subtitle">Profesionales con más de 20 años de experiencia en sectores público y privado, reconocidos por organismos internacionales.</p>
     </div>
-    <div class="equipo-grid fade-in">
+
+    <div class="equipo-resumen fade-in" id="equipoResumen"
+         ondblclick="toggleEquipoDetalle()"
+         onkeydown="if(event.key==='Enter') toggleEquipoDetalle()"
+         role="button" tabindex="0" aria-label="Doble clic para ver los detalles del equipo" aria-expanded="false">
+      <div class="equipo-resumen-avatars">
+        <div class="miembro-avatar">DV</div>
+        <div class="miembro-avatar">JM</div>
+      </div>
+      <p class="equipo-resumen-text">
+        Somos un equipo de <strong>ingenieros ambientales</strong> con más de <strong>40 años de experiencia combinada</strong> en ESG, gerencia de proyectos, mercados globales y transformación digital — reconocidos por organismos internacionales como el <strong>Banco Mundial</strong>, y cofundadores de iniciativas de sostenibilidad con impacto en Colombia y la región.
+      </p>
+      <span class="equipo-resumen-hint">👀 Haga doble clic para conocer a cada uno de nosotros</span>
+    </div>
+
+    <div class="equipo-grid fade-in" id="equipoDetalle" style="display:none">
       <div class="miembro-card">
         <div class="miembro-header">
           <div class="miembro-avatar">DV</div>
@@ -1558,6 +1589,23 @@
   // ── IDs de Formspree (reemplazar con los IDs reales tras crear las forms) ──
   const FORMSPREE_CONTACTO    = 'https://formspree.io/f/maqznrob';
   const FORMSPREE_REGISTRO    = 'https://formspree.io/f/xzdqznry';
+
+  // ── EQUIPO: revelar detalles con doble clic ──
+  function toggleEquipoDetalle() {
+    const el = document.getElementById('equipoDetalle');
+    const resumen = document.getElementById('equipoResumen');
+    const opening = el.style.display === 'none' || !el.style.display;
+    if (opening) {
+      el.style.display = 'grid';
+      requestAnimationFrame(() => el.classList.add('visible'));
+      resumen.setAttribute('aria-expanded', 'true');
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    } else {
+      el.classList.remove('visible');
+      resumen.setAttribute('aria-expanded', 'false');
+      setTimeout(() => { el.style.display = 'none'; }, 400);
+    }
+  }
 
   // ── MODAL ASSESSMENT ──
   function launchAssessment() {
