@@ -1244,9 +1244,9 @@
   <div class="container">
     <!-- Intro general -->
     <div class="section-header center fade-in">
-      <span class="section-tag">Conciencia Ambiental · Gamificación</span>
+      <span class="section-tag">Conciencia Ambiental y Laboral · Gamificación</span>
       <h2 class="section-title">Aprender sostenibilidad<br>jugando</h2>
-      <p class="section-subtitle">La gamificación es una de las herramientas más poderosas para generar cambios de comportamiento duraderos. Mediante experiencias lúdicas e interactivas, convertimos conceptos de sostenibilidad en hábitos reales.</p>
+      <p class="section-subtitle">La gamificación es una de las herramientas más poderosas para generar cambios de comportamiento duraderos. Mediante experiencias lúdicas e interactivas, convertimos conceptos de sostenibilidad ambiental y de seguridad en el trabajo en hábitos reales.</p>
     </div>
 
     <div class="game-features fade-in">
@@ -1369,6 +1369,35 @@
             <span class="game-card-tag">🛡️ Defensa</span>
           </div>
           <button class="btn btn-primary game-card-play-btn" onclick="launchGame('agua')">▶ &nbsp;Jugar Guardián del Agua</button>
+        </div>
+      </div>
+
+      <!-- Juego 4: Turno Seguro 3D -->
+      <div class="game-card" id="gameCard-sst">
+        <div class="game-card-visual">
+          <button class="game-app-btn" onclick="launchGame('sst')" aria-label="Jugar Turno Seguro 3D">
+            <div class="game-app-icon" style="background:linear-gradient(145deg, #8A6200 0%, #C08800 40%, #F2B705 78%, #FFD966 100%);box-shadow:0 8px 40px rgba(242,183,5,.42), 0 0 0 1px rgba(200,169,81,.25)">
+              <span class="game-app-icon-inner">🦺</span>
+              <div class="game-app-play">▶</div>
+            </div>
+          </button>
+        </div>
+        <div class="game-card-info">
+          <h4 class="game-card-name">Turno Seguro 3D</h4>
+          <div class="game-card-purpose">
+            <span class="game-card-label">Propósito</span>
+            <p>Formar cultura de autocuidado en Seguridad y Salud en el Trabajo —la dimensión social de la sostenibilidad—. Cada decisión enseña por qué el EPP, el permiso de trabajo y el reporte de condiciones inseguras no son trámites: son lo que devuelve a cada persona a su casa.</p>
+          </div>
+          <div class="game-card-how">
+            <span class="game-card-label">¿Cómo se juega?</span>
+            <p>Recorre en 3D dos mundos —planta y oficina— con joystick en pantalla. En cada nivel decides tú: equiparte antes de entrar, pedir el permiso antes de subir, reportar lo que puede lastimar a otro. Si te equivocas, el accidente ocurre de forma pedagógica y pierdes salud; con tres accidentes graves el turno termina en la enfermería.</p>
+          </div>
+          <div class="game-card-tags">
+            <span class="game-card-tag">🦺 SST</span>
+            <span class="game-card-tag">🎮 3D · 16 Niveles</span>
+            <span class="game-card-tag">📱 Celular y PC</span>
+          </div>
+          <button class="btn btn-primary game-card-play-btn" onclick="launchGame('sst')">▶ &nbsp;Jugar Turno Seguro 3D</button>
         </div>
       </div>
 
@@ -1686,6 +1715,11 @@
     agua: {
       url: 'https://amdavil.github.io/herramientas-y-assessment/guardian-del-agua.html',
       title: '💧🌳 Guardián del Agua — Protege el Manantial'
+    },
+    sst: {
+      url: 'https://amdavil.github.io/turno-seguro/',
+      title: '🦺 Turno Seguro 3D — Seguridad y Salud en el Trabajo',
+      alto: 640   /* el 3D necesita más alto que los juegos 2D */
     }
   };
 
@@ -1701,7 +1735,9 @@
       requestAnimationFrame(() => wrap.classList.add('visible'));
       document.getElementById('gameFrameTitle').textContent = game.title;
       document.getElementById('gameFullscreenLink').href = game.url;
-      document.getElementById('gameIframe').src = game.url;
+      const frame = document.getElementById('gameIframe');
+      frame.style.height = (game.alto || 540) + 'px';
+      frame.src = game.url;
     }, 300);
   }
 
