@@ -21,10 +21,12 @@
   </main>
   <script>
   (()=>{
-    const VERSION='664';
+    const VERSION='665';
     const status=document.getElementById('status');
     const errorBox=document.getElementById('error');
     const retry=document.getElementById('retry');
+    const root='https://raw.githubusercontent.com/Amdavil/projectability/main/deliflor-bloom-lab/';
+    const cdn='https://cdn.jsdelivr.net/gh/Amdavil/projectability@main/deliflor-bloom-lab/';
 
     function decodeBase64(base64){
       let clean=String(base64||'').replace(/[^A-Za-z0-9+/=]/g,'');
@@ -32,53 +34,61 @@
       clean+='='.repeat((4-clean.length%4)%4);
       if(!clean.length) throw new Error('Los componentes de la aplicación llegaron vacíos.');
       const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-      const output=[];
-      let buffer=0,bits=0;
+      const output=[];let buffer=0,bits=0;
       for(let i=0;i<clean.length;i++){
-        const ch=clean[i];
-        if(ch==='=') break;
-        const value=alphabet.indexOf(ch);
-        if(value<0) continue;
-        buffer=(buffer<<6)|value;
-        bits+=6;
+        const ch=clean[i];if(ch==='=')break;
+        const value=alphabet.indexOf(ch);if(value<0)continue;
+        buffer=(buffer<<6)|value;bits+=6;
         if(bits>=8){bits-=8;output.push((buffer>>bits)&255);buffer&=(1<<bits)-1;}
       }
       return new Uint8Array(output);
     }
 
+    async function fetchTextWithFallback(name){
+      const urls=[`${root}${name}?v=${VERSION}`,`${cdn}${name}?v=${VERSION}`,`${name}?v=${VERSION}`];
+      let lastError;
+      for(const url of urls){
+        for(let attempt=0;attempt<2;attempt++){
+          const controller=new AbortController();
+          const timer=setTimeout(()=>controller.abort(),12000);
+          try{
+            const response=await fetch(url,{cache:'no-store',mode:'cors',signal:controller.signal});
+            clearTimeout(timer);
+            if(!response.ok)throw new Error(`${response.status} ${response.statusText}`);
+            const text=(await response.text()).replace(/\s+/g,'');
+            if(text.length<100)throw new Error('archivo incompleto');
+            return text;
+          }catch(err){clearTimeout(timer);lastError=err;await new Promise(r=>setTimeout(r,500));}
+        }
+      }
+      throw new Error(`No fue posible cargar ${name}: ${lastError&&lastError.message?lastError.message:'error de red'}`);
+    }
+
     async function start(){
       errorBox.style.display='none';retry.style.display='none';
       try{
-        if(!('DecompressionStream' in window)) throw new Error('Este navegador no soporta la descompresión necesaria. Abre el enlace en Chrome o Edge actualizado.');
+        if(!('DecompressionStream' in window))throw new Error('Abre este enlace en Chrome o Edge actualizado.');
         const names=['payload-01.txt','payload-02.txt','payload-03.txt','payload-04.txt','payload-05.txt'];
         const parts=[];
         for(let i=0;i<names.length;i++){
           status.textContent=`Cargando componente ${i+1} de ${names.length}…`;
-          const response=await fetch(`${names[i]}?v=${VERSION}`,{cache:'no-store'});
-          if(!response.ok) throw new Error(`No fue posible cargar ${names[i]} (${response.status}).`);
-          const part=(await response.text()).replace(/\s+/g,'');
-          if(part.length<100) throw new Error(`${names[i]} está incompleto.`);
-          parts.push(part);
+          parts.push(await fetchTextWithFallback(names[i]));
         }
         status.textContent='Validando componentes…';
-        const joined=parts.join('');
-        const bytes=decodeBase64(joined);
-        if(bytes.length<10000) throw new Error('La aplicación reconstruida está incompleta.');
+        const bytes=decodeBase64(parts.join(''));
+        if(bytes.length<10000)throw new Error('La aplicación reconstruida está incompleta.');
         status.textContent='Construyendo la experiencia 3D…';
         const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
         const html=await new Response(stream).text();
-        if(!html.includes('<!doctype html')&&!html.includes('<!DOCTYPE html')) throw new Error('El contenido reconstruido no es una aplicación HTML válida.');
+        if(!/<!doctype html/i.test(html))throw new Error('El contenido reconstruido no es una aplicación HTML válida.');
         document.open();document.write(html);document.close();
       }catch(err){
-        console.error(err);
-        status.textContent='No fue posible iniciar el aplicativo.';
-        errorBox.style.display='block';
-        retry.style.display='block';
-        errorBox.textContent=(err&&err.message)||'Ocurrió un error inesperado. Recarga la página o prueba en Chrome o Edge.';
+        console.error(err);status.textContent='No fue posible iniciar el aplicativo.';
+        errorBox.style.display='block';retry.style.display='block';
+        errorBox.textContent=(err&&err.message)||'Ocurrió un error inesperado.';
       }
     }
-    retry.addEventListener('click',start);
-    start();
+    retry.addEventListener('click',start);start();
   })();
   </script>
 </body>
