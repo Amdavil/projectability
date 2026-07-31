@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#b2176b">
   <title>DELIFLOR Bloom Lab</title>
   <style>
-    *{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff 0,#fbf5f8 52%,#f0e3eb 100%);font-family:Arial,Helvetica,sans-serif;color:#30222d}.card{width:min(520px,calc(100% - 36px));padding:38px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid #eadce5;box-shadow:0 24px 70px rgba(92,31,68,.15);text-align:center}.brand{font-weight:900;letter-spacing:.28em;color:#b2176b;font-size:28px;margin-left:.28em}.title{font-size:22px;font-weight:800;margin:20px 0 8px}.text{font-size:14px;line-height:1.55;color:#776572}.bar{height:8px;border-radius:999px;background:#f0dce8;overflow:hidden;margin:24px 0 12px}.bar>i{display:block;height:100%;width:22%;border-radius:inherit;background:linear-gradient(90deg,#b2176b,#dc6aa6);animation:load 1.15s ease-in-out infinite alternate}.small{font-size:12px;color:#9b8794}.error{display:none;margin-top:18px;padding:14px;border-radius:14px;background:#fff0f5;color:#8f1558;font-size:13px;line-height:1.45}@keyframes load{to{transform:translateX(355%)}}
+    *{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff 0,#fbf5f8 52%,#f0e3eb 100%);font-family:Arial,Helvetica,sans-serif;color:#30222d}.card{width:min(560px,calc(100% - 36px));padding:38px;border-radius:28px;background:rgba(255,255,255,.94);border:1px solid #eadce5;box-shadow:0 24px 70px rgba(92,31,68,.15);text-align:center}.brand{font-weight:900;letter-spacing:.28em;color:#b2176b;font-size:28px;margin-left:.28em}.title{font-size:22px;font-weight:800;margin:20px 0 8px}.text{font-size:14px;line-height:1.55;color:#776572}.bar{height:8px;border-radius:999px;background:#f0dce8;overflow:hidden;margin:24px 0 12px}.bar>i{display:block;height:100%;width:22%;border-radius:inherit;background:linear-gradient(90deg,#b2176b,#dc6aa6);animation:load 1.15s ease-in-out infinite alternate}.small{font-size:12px;color:#9b8794}.error{display:none;margin-top:18px;padding:14px;border-radius:14px;background:#fff0f5;color:#8f1558;font-size:13px;line-height:1.45;word-break:break-word}.retry{display:none;margin:18px auto 0;border:0;border-radius:14px;background:#b2176b;color:#fff;font-weight:800;padding:13px 22px;cursor:pointer}@keyframes load{to{transform:translateX(355%)}}
   </style>
 </head>
 <body>
@@ -17,34 +17,68 @@
     <div class="bar"><i></i></div>
     <div class="small" id="status">Preparando la experiencia…</div>
     <div class="error" id="error"></div>
+    <button class="retry" id="retry" type="button">Intentar nuevamente</button>
   </main>
   <script>
-  (async()=>{
+  (()=>{
+    const VERSION='664';
     const status=document.getElementById('status');
-    const error=document.getElementById('error');
-    try{
-      if(!('DecompressionStream' in window)) throw new Error('Este navegador no soporta la descompresión necesaria. Abre el enlace en Chrome o Edge actualizado.');
-      const names=['payload-01.txt','payload-02.txt','payload-03.txt','payload-04.txt','payload-05.txt'];
-      const parts=[];
-      for(let i=0;i<names.length;i++){
-        status.textContent=`Cargando componente ${i+1} de ${names.length}…`;
-        const response=await fetch(names[i],{cache:'no-store'});
-        if(!response.ok) throw new Error(`No fue posible cargar ${names[i]} (${response.status}).`);
-        parts.push((await response.text()).trim());
+    const errorBox=document.getElementById('error');
+    const retry=document.getElementById('retry');
+
+    function decodeBase64(base64){
+      let clean=String(base64||'').replace(/[^A-Za-z0-9+/=]/g,'');
+      clean=clean.replace(/=+$/,'');
+      clean+='='.repeat((4-clean.length%4)%4);
+      if(!clean.length) throw new Error('Los componentes de la aplicación llegaron vacíos.');
+      const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+      const output=[];
+      let buffer=0,bits=0;
+      for(let i=0;i<clean.length;i++){
+        const ch=clean[i];
+        if(ch==='=') break;
+        const value=alphabet.indexOf(ch);
+        if(value<0) continue;
+        buffer=(buffer<<6)|value;
+        bits+=6;
+        if(bits>=8){bits-=8;output.push((buffer>>bits)&255);buffer&=(1<<bits)-1;}
       }
-      status.textContent='Construyendo la experiencia 3D…';
-      const binary=atob(parts.join(''));
-      const bytes=new Uint8Array(binary.length);
-      for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
-      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-      const html=await new Response(stream).text();
-      document.open();document.write(html);document.close();
-    }catch(err){
-      console.error(err);
-      status.textContent='No fue posible iniciar el aplicativo.';
-      error.style.display='block';
-      error.textContent=(err&&err.message)||'Ocurrió un error inesperado. Recarga la página o prueba en Chrome o Edge.';
+      return new Uint8Array(output);
     }
+
+    async function start(){
+      errorBox.style.display='none';retry.style.display='none';
+      try{
+        if(!('DecompressionStream' in window)) throw new Error('Este navegador no soporta la descompresión necesaria. Abre el enlace en Chrome o Edge actualizado.');
+        const names=['payload-01.txt','payload-02.txt','payload-03.txt','payload-04.txt','payload-05.txt'];
+        const parts=[];
+        for(let i=0;i<names.length;i++){
+          status.textContent=`Cargando componente ${i+1} de ${names.length}…`;
+          const response=await fetch(`${names[i]}?v=${VERSION}`,{cache:'no-store'});
+          if(!response.ok) throw new Error(`No fue posible cargar ${names[i]} (${response.status}).`);
+          const part=(await response.text()).replace(/\s+/g,'');
+          if(part.length<100) throw new Error(`${names[i]} está incompleto.`);
+          parts.push(part);
+        }
+        status.textContent='Validando componentes…';
+        const joined=parts.join('');
+        const bytes=decodeBase64(joined);
+        if(bytes.length<10000) throw new Error('La aplicación reconstruida está incompleta.');
+        status.textContent='Construyendo la experiencia 3D…';
+        const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+        const html=await new Response(stream).text();
+        if(!html.includes('<!doctype html')&&!html.includes('<!DOCTYPE html')) throw new Error('El contenido reconstruido no es una aplicación HTML válida.');
+        document.open();document.write(html);document.close();
+      }catch(err){
+        console.error(err);
+        status.textContent='No fue posible iniciar el aplicativo.';
+        errorBox.style.display='block';
+        retry.style.display='block';
+        errorBox.textContent=(err&&err.message)||'Ocurrió un error inesperado. Recarga la página o prueba en Chrome o Edge.';
+      }
+    }
+    retry.addEventListener('click',start);
+    start();
   })();
   </script>
 </body>
