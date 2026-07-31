@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#b2176b">
+  <title>DELIFLOR Bloom Lab</title>
+  <style>
+    *{box-sizing:border-box}html,body{height:100%;margin:0}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#fff 0,#fbf5f8 52%,#f0e3eb 100%);font-family:Arial,Helvetica,sans-serif;color:#30222d}.card{width:min(520px,calc(100% - 36px));padding:38px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid #eadce5;box-shadow:0 24px 70px rgba(92,31,68,.15);text-align:center}.brand{font-weight:900;letter-spacing:.28em;color:#b2176b;font-size:28px;margin-left:.28em}.title{font-size:22px;font-weight:800;margin:20px 0 8px}.text{font-size:14px;line-height:1.55;color:#776572}.bar{height:8px;border-radius:999px;background:#f0dce8;overflow:hidden;margin:24px 0 12px}.bar>i{display:block;height:100%;width:22%;border-radius:inherit;background:linear-gradient(90deg,#b2176b,#dc6aa6);animation:load 1.15s ease-in-out infinite alternate}.small{font-size:12px;color:#9b8794}.error{display:none;margin-top:18px;padding:14px;border-radius:14px;background:#fff0f5;color:#8f1558;font-size:13px;line-height:1.45}@keyframes load{to{transform:translateX(355%)}}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">DELIFLOR</div>
+    <div class="title">Iniciando Bloom Lab 3D</div>
+    <div class="text">Cargando el motor tridimensional y los materiales botánicos.</div>
+    <div class="bar"><i></i></div>
+    <div class="small" id="status">Preparando la experiencia…</div>
+    <div class="error" id="error"></div>
+  </main>
+  <script>
+  (async()=>{
+    const status=document.getElementById('status');
+    const error=document.getElementById('error');
+    try{
+      if(!('DecompressionStream' in window)) throw new Error('Este navegador no soporta la descompresión necesaria. Abre el enlace en Chrome o Edge actualizado.');
+      const names=['payload-01.txt','payload-02.txt','payload-03.txt','payload-04.txt','payload-05.txt'];
+      const parts=[];
+      for(let i=0;i<names.length;i++){
+        status.textContent=`Cargando componente ${i+1} de ${names.length}…`;
+        const response=await fetch(names[i],{cache:'no-store'});
+        if(!response.ok) throw new Error(`No fue posible cargar ${names[i]} (${response.status}).`);
+        parts.push((await response.text()).trim());
+      }
+      status.textContent='Construyendo la experiencia 3D…';
+      const binary=atob(parts.join(''));
+      const bytes=new Uint8Array(binary.length);
+      for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+      const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+      const html=await new Response(stream).text();
+      document.open();document.write(html);document.close();
+    }catch(err){
+      console.error(err);
+      status.textContent='No fue posible iniciar el aplicativo.';
+      error.style.display='block';
+      error.textContent=(err&&err.message)||'Ocurrió un error inesperado. Recarga la página o prueba en Chrome o Edge.';
+    }
+  })();
+  </script>
+</body>
+</html>
