@@ -27,9 +27,10 @@ jobs:
           import re
 
           folder = Path('deliflor-bloom-lab')
-          parts = sorted(folder.glob('payload-*.txt'))
-          if len(parts) != 5:
-              raise SystemExit(f'Expected 5 payload files, found {len(parts)}')
+          parts = [folder / f'payload-{i:02d}.txt' for i in range(1, 6)]
+          missing = [str(p) for p in parts if not p.exists()]
+          if missing:
+              raise SystemExit(f'Missing payload files: {missing}')
 
           encoded = ''.join(re.sub(r'\s+', '', p.read_text(encoding='utf-8')) for p in parts)
           if len(encoded) < 10000:
