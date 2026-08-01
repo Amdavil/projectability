@@ -13,7 +13,7 @@
   <main class="card">
     <div class="brand">DELIFLOR</div>
     <div class="title">Iniciando Bloom Lab 3D</div>
-    <div class="text">Cargando el motor tridimensional y los materiales botánicos.</div>
+    <div class="text">Cargando el motor tridimensional, el visor móvil y los materiales botánicos.</div>
     <div class="bar"><i></i></div>
     <div class="small" id="status">Preparando la experiencia…</div>
     <div class="error" id="error"></div>
@@ -21,7 +21,7 @@
   </main>
   <script>
   (()=>{
-    const VERSION='665';
+    const VERSION='910-20260731';
     const status=document.getElementById('status');
     const errorBox=document.getElementById('error');
     const retry=document.getElementById('retry');
@@ -50,7 +50,7 @@
       for(const url of urls){
         for(let attempt=0;attempt<2;attempt++){
           const controller=new AbortController();
-          const timer=setTimeout(()=>controller.abort(),12000);
+          const timer=setTimeout(()=>controller.abort(),15000);
           try{
             const response=await fetch(url,{cache:'no-store',mode:'cors',signal:controller.signal});
             clearTimeout(timer);
