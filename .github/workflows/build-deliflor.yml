@@ -1,0 +1,75 @@
+name: Build DELIFLOR Bloom Lab
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'deliflor-bloom-lab/payload-*.txt'
+      - '.github/workflows/build-deliflor.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Reconstruct single-file application
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64
+          import gzip
+          import re
+
+          folder = Path('deliflor-bloom-lab')
+          parts = sorted(folder.glob('payload-*.txt'))
+          if len(parts) != 5:
+              raise SystemExit(f'Expected 5 payload files, found {len(parts)}')
+
+          encoded = ''.join(re.sub(r'\s+', '', p.read_text(encoding='utf-8')) for p in parts)
+          if len(encoded) < 10000:
+              raise SystemExit('Payload content is incomplete')
+
+          compressed = base64.b64decode(encoded, validate=True)
+          html = gzip.decompress(compressed).decode('utf-8')
+
+          if '<!doctype html' not in html.lower():
+              raise SystemExit('Reconstructed content is not valid HTML')
+          if 'DELIFLOR' not in html or 'Bloom Lab' not in html:
+              raise SystemExit('DELIFLOR application markers were not found')
+
+          output = folder / 'index.html'
+          output.write_text(html, encoding='utf-8')
+          print(f'Generated {output} ({output.stat().st_size:,} bytes)')
+
+      - name: Validate embedded JavaScript syntax
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('deliflor-bloom-lab/index.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script>([\s\S]*?)</script>', html)
+          if not scripts:
+              raise SystemExit('No embedded JavaScript found')
+          Path('/tmp/deliflor-app.js').write_text(scripts[-1], encoding='utf-8')
+          PY
+          node --check /tmp/deliflor-app.js
+
+      - name: Commit generated direct application
+        shell: bash
+        run: |
+          if git diff --quiet -- deliflor-bloom-lab/index.html; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add deliflor-bloom-lab/index.html
+          git commit -m 'Build DELIFLOR Bloom Lab as direct single-file app'
+          git push
