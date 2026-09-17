@@ -1437,6 +1437,13 @@
         allow="web-share; clipboard-write"
         allowfullscreen>
       </iframe>
+
+      <!-- Siguiente paso: del juego a la herramienta -->
+      <div id="gameCta" style="display:none;margin-top:18px;background:rgba(255,255,255,.05);border:1px solid rgba(200,169,81,.35);border-radius:14px;padding:22px 26px">
+        <div style="font-size:.78rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Cuando termine de jugar</div>
+        <p id="gameCtaTexto" style="margin:0 0 16px;font-size:.95rem;line-height:1.7;color:rgba(255,255,255,.88)"></p>
+        <a id="gameCtaBtn" class="btn btn-green" href="#" target="_blank" rel="noopener" style="font-size:.88rem"></a>
+      </div>
     </div>
 
     <p class="text-center fade-in" style="margin-top:32px;font-size:.84rem;color:var(--gray);line-height:1.7">
@@ -1714,23 +1721,46 @@
     }, 300);
   }
 
+  const HERRAMIENTAS_BASE = 'https://amdavil.github.io/herramientas-y-assessment';
+  const utmJuego = id => `?utm_source=juegos&utm_medium=web&utm_campaign=gamificacion&utm_content=${id}`;
+
   const GAMES = {
     ciclo: {
       url: 'https://amdavil.github.io/Recicla-runner-3.0/',
-      title: '🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad'
+      title: '🎮 Ciclo Urbano — Juego de Reciclaje y Sostenibilidad',
+      cta: {
+        texto: 'En el juego separó residuos en segundos. En su empresa, esos mismos residuos son costo — o ingreso. El Diagnóstico de Circularidad le muestra dónde está perdiendo valor, gratis y en 10 minutos.',
+        boton: 'Hacer el diagnóstico gratis →',
+        href: `${HERRAMIENTAS_BASE}/diagnostico-circularidad.html`
+      }
     },
     eco: {
       url: 'https://amdavil.github.io/eco-guardian-game/',
-      title: '🌍 EcoGuardián — Salva el Planeta'
+      title: '🌍 EcoGuardián — Salva el Planeta',
+      cta: {
+        texto: '¿Y su organización, qué tan sostenible es de verdad? El Test ADN Sostenible se lo dice en 8 preguntas y 3 minutos, sin registro.',
+        boton: 'Descubrir mi ADN Sostenible →',
+        href: `${HERRAMIENTAS_BASE}/adn-sostenible.html`
+      }
     },
     agua: {
       url: 'https://amdavil.github.io/herramientas-y-assessment/guardian-del-agua.html',
-      title: '💧🌳 Guardián del Agua — Protege el Manantial'
+      title: '💧🌳 Guardián del Agua — Protege el Manantial',
+      cta: {
+        texto: 'Cuidar el agua en el juego cuesta clics; en la operación cuesta plata. El Diagnóstico de Circularidad revisa cómo gestiona el agua, la energía y los materiales de su empresa, gratis.',
+        boton: 'Revisar mi operación →',
+        href: `${HERRAMIENTAS_BASE}/diagnostico-circularidad.html`
+      }
     },
     sst: {
       url: 'https://amdavil.github.io/turno-seguro/',
       title: '🦺 Turno Seguro 3D — Seguridad y Salud en el Trabajo',
-      alto: 640   /* el 3D necesita más alto que los juegos 2D */
+      alto: 640,   /* el 3D necesita más alto que los juegos 2D */
+      cta: {
+        texto: '¿Quiere esta experiencia con los riesgos reales de su operación, su marca y reporte de participación del equipo? Armamos la versión de su empresa.',
+        boton: 'Hablemos de su campaña de SST →',
+        href: '#contacto'
+      }
     }
   };
 
@@ -1749,6 +1779,23 @@
       const frame = document.getElementById('gameIframe');
       frame.style.height = (game.alto || 540) + 'px';
       frame.src = game.url;
+
+      const cta = document.getElementById('gameCta');
+      if (game.cta) {
+        document.getElementById('gameCtaTexto').textContent = game.cta.texto;
+        const btn = document.getElementById('gameCtaBtn');
+        btn.textContent = game.cta.boton;
+        btn.href = game.cta.href.startsWith('#') ? game.cta.href : game.cta.href + utmJuego(id);
+        btn.target = game.cta.href.startsWith('#') ? '_self' : '_blank';
+        btn.onclick = () => {
+          if (window.gtag) gtag('event', 'juego_cta_click', { juego: id, destino: game.cta.href });
+        };
+        cta.style.display = 'block';
+      } else {
+        cta.style.display = 'none';
+      }
+
+      if (window.gtag) gtag('event', 'juego_inicio', { juego: id, juego_titulo: game.title });
     }, 300);
   }
 
@@ -1758,6 +1805,7 @@
     wrap.style.display = 'none';
     wrap.classList.remove('visible');
     document.getElementById('gameIframe').src = '';
+    document.getElementById('gameCta').style.display = 'none';
     catalog.style.display = 'flex';
     requestAnimationFrame(() => { catalog.style.opacity = '1'; });
   }
