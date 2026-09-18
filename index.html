@@ -382,6 +382,32 @@
     /* ── BRAND LOGO (secciones claras) ── */
     .brand-logo-img { height: 56px; width: auto; display: block; }
 
+    /* ── CONFIANZA ── */
+    .trust { background: var(--navy); padding: 84px 24px; border-top: 1px solid rgba(200,169,81,.15); }
+    .trust-title { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 700; color: #fff; text-align: center; margin-bottom: 10px; }
+    .trust-sub { text-align: center; color: var(--gray2); font-size: .95rem; max-width: 720px; margin: 0 auto 44px; line-height: 1.75; }
+    .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; max-width: 1100px; margin: 0 auto; }
+    .trust-card {
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--r); padding: 26px 24px; transition: border-color .25s, transform .25s;
+    }
+    .trust-card:hover { border-color: rgba(200,169,81,.5); transform: translateY(-3px); }
+    .trust-card-icon { font-size: 1.7rem; margin-bottom: 12px; display: block; }
+    .trust-card h4 { font-size: .98rem; font-weight: 800; color: var(--gold2); margin-bottom: 8px; line-height: 1.35; }
+    .trust-card p { font-size: .86rem; color: var(--gray2); line-height: 1.7; }
+    .trust-standards {
+      max-width: 1100px; margin: 34px auto 0; padding-top: 26px; border-top: 1px solid rgba(255,255,255,.1);
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 14px;
+    }
+    .trust-chip {
+      font-size: .74rem; font-weight: 700; letter-spacing: .4px; color: var(--gray2);
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px; padding: 7px 16px;
+    }
+    .trust-legal { text-align: center; margin-top: 26px; font-size: .82rem; color: var(--gray); line-height: 1.8; }
+    .trust-legal a { color: var(--gold); font-weight: 600; text-decoration: none; }
+    .trust-legal a:hover { text-decoration: underline; }
+
     /* ── FOOTER ── */
     footer { background: var(--navy); border-top: 1px solid rgba(200,169,81,.15); padding: 48px 24px; }
     .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
@@ -1129,6 +1155,54 @@
   </div>
 </section>
 
+<!-- ═══ CONFIANZA Y SEGURIDAD ═══ -->
+<section class="trust" id="confianza">
+  <div class="container">
+    <h3 class="trust-title fade-in">Con qué seriedad tratamos su información</h3>
+    <p class="trust-sub fade-in">
+      Antes de que diligencie una herramienta o pague un informe, conviene que sepa exactamente
+      qué pasa con sus datos, quién procesa el pago y qué alcance tiene lo que recibe.
+    </p>
+
+    <div class="trust-grid">
+      <div class="trust-card fade-in">
+        <span class="trust-card-icon">🔒</span>
+        <h4>Sus respuestas no salen de su navegador</h4>
+        <p>Puede recorrer cualquier herramienta completa sin registrarse y sin dejar datos de contacto. Lo que responde se guarda únicamente en su equipo: no lo almacenamos ni lo compartimos con terceros.</p>
+      </div>
+      <div class="trust-card fade-in">
+        <span class="trust-card-icon">💳</span>
+        <h4>El pago lo procesa PayPal, no nosotros</h4>
+        <p>Las compras se realizan en la plataforma de PayPal, con tarjeta o con su cuenta. Nunca vemos, recibimos ni almacenamos los datos de su medio de pago; de la transacción solo conservamos la constancia.</p>
+      </div>
+      <div class="trust-card fade-in">
+        <span class="trust-card-icon">📐</span>
+        <h4>Metodologías públicas y citadas</h4>
+        <p>Nuestras herramientas siguen marcos reconocidos y los declaran en cada informe, con los factores y referencias que se usaron. Usted puede rastrear de dónde salió cada resultado.</p>
+      </div>
+      <div class="trust-card fade-in">
+        <span class="trust-card-icon">⚖️</span>
+        <h4>Alcance declarado, sin letra menuda</h4>
+        <p>Cada documento dice con claridad qué es y qué no es: son informes de orientación elaborados con la información que usted entrega, no auditorías ni verificaciones de un tercero independiente.</p>
+      </div>
+    </div>
+
+    <div class="trust-standards fade-in">
+      <span class="trust-chip">Estándares GRI 2021</span>
+      <span class="trust-chip">GHG Protocol · Corporate Standard</span>
+      <span class="trust-chip">ISO 14064-1</span>
+      <span class="trust-chip">Economía circular · Ellen MacArthur Foundation</span>
+      <span class="trust-chip">Ley 1581 de 2012 · Habeas data</span>
+      <span class="trust-chip">Conexión cifrada HTTPS</span>
+    </div>
+
+    <p class="trust-legal fade-in">
+      Consulte nuestra <a href="privacidad.html">Política de tratamiento de datos</a> ·
+      ¿Dudas antes de comprar? Escríbanos a <a href="mailto:projectability.pal@gmail.com">projectability.pal@gmail.com</a>
+    </p>
+  </div>
+</section>
+
 <!-- ═══ FORMACIÓN ESTRATÉGICA ═══ -->
 <section class="formacion" id="formacion">
   <div class="container">
@@ -1587,13 +1661,23 @@
         </a>
       </div>
     </div>
-    <div class="footer-links">
-      <a href="#inicio"      class="footer-link">Inicio</a>
-      <a href="#servicios"   class="footer-link">Servicios</a>
-      <a href="#metodologia" class="footer-link">Metodología</a>
-      <a href="#equipo"      class="footer-link">Equipo</a>
-      <a href="#formacion"   class="footer-link">Formación</a>
-      <a href="#contacto"    class="footer-link">Contacto</a>
+    <div>
+      <div class="footer-links">
+        <a href="#inicio"      class="footer-link">Inicio</a>
+        <a href="#servicios"   class="footer-link">Servicios</a>
+        <a href="#metodologia" class="footer-link">Metodología</a>
+        <a href="#equipo"      class="footer-link">Equipo</a>
+        <a href="#formacion"   class="footer-link">Formación</a>
+        <a href="#contacto"    class="footer-link">Contacto</a>
+      </div>
+      <div class="footer-links" style="margin-top:12px;justify-content:flex-end">
+        <a href="#confianza"     class="footer-link">Confianza y seguridad</a>
+        <a href="privacidad.html" class="footer-link">Tratamiento de datos</a>
+      </div>
+      <div class="footer-copy" style="text-align:right;max-width:420px;margin-left:auto">
+        Las herramientas de Projectability son documentos de orientación y no sustituyen una auditoría
+        ni una verificación independiente.
+      </div>
     </div>
   </div>
 </footer>
