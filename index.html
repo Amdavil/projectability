@@ -693,9 +693,144 @@
     /* ── FADE-IN ── */
     .fade-in { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════════════════════════════════════════════════════
+       CAPA VISUAL — profundidad, textura y jerarquía tipográfica
+       ══════════════════════════════════════════════════════════ */
+
+    /* Grano sutil sobre todo el sitio: quita el aspecto de color plano */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Luz de fondo en las secciones oscuras */
+    .hero, .metodologia, .formacion, .trust, .contacto, .gamificacion { position: relative; isolation: isolate; }
+    .metodologia, .formacion, .trust {
+      background-image:
+        radial-gradient(60rem 32rem at 12% -10%, rgba(95,141,62,.22), transparent 60%),
+        radial-gradient(48rem 28rem at 92% 108%, rgba(200,169,81,.16), transparent 62%),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+    }
+    .contacto {
+      background-image:
+        radial-gradient(52rem 30rem at 85% -12%, rgba(122,171,82,.22), transparent 60%),
+        radial-gradient(44rem 26rem at 8% 110%, rgba(200,169,81,.12), transparent 60%),
+        linear-gradient(135deg, #0F2E1A 0%, var(--navy) 100%);
+    }
+    .gamificacion {
+      background-image:
+        radial-gradient(46rem 26rem at 88% 0%, rgba(122,171,82,.20), transparent 60%),
+        radial-gradient(40rem 24rem at 5% 100%, rgba(47,117,181,.16), transparent 60%),
+        linear-gradient(160deg, #0A1F07 0%, #0F2A10 50%, #152E0A 100%);
+    }
+    .hero {
+      background-image:
+        radial-gradient(56rem 34rem at 78% 18%, rgba(95,141,62,.26), transparent 62%),
+        radial-gradient(42rem 26rem at 10% 90%, rgba(200,169,81,.14), transparent 60%),
+        linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, var(--navy3) 100%);
+    }
+
+    /* Trama fina en las secciones claras: textura sin ruido visual */
+    .servicios, .equipo, .tendencias, .assessment {
+      position: relative;
+      background-image:
+        radial-gradient(rgba(31,78,121,.07) 1px, transparent 1px),
+        radial-gradient(38rem 22rem at 95% 0%, rgba(95,141,62,.10), transparent 65%);
+      background-size: 26px 26px, auto;
+    }
+    .equipo, .tendencias { background-color: #F1F5F9; }
+
+    /* Borde de luz entre secciones: el corte deja de ser seco */
+    section + section { position: relative; }
+    section + section::before {
+      content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: min(900px, 86%); height: 1px; z-index: 2;
+      background: linear-gradient(90deg, transparent, rgba(200,169,81,.45), transparent);
+    }
+
+    /* ── Jerarquía tipográfica ── */
+    .section-title { font-size: clamp(2rem, 3.4vw, 3.05rem); letter-spacing: -.015em; }
+    .section-subtitle { font-size: 1.06rem; line-height: 1.8; }
+    .hero-title { font-size: clamp(2.5rem, 5vw, 4.1rem); letter-spacing: -.02em; }
+    .hero-title span {
+      background: linear-gradient(100deg, var(--gold2) 10%, var(--gold) 55%, #A8832F 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero-subtitle { font-size: 1.12rem; }
+    .section-tag { display: inline-flex; align-items: center; gap: 8px; backdrop-filter: blur(6px); }
+    .section-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; box-shadow: 0 0 0 3px rgba(255,255,255,.12);
+    }
+    .section-header.center .section-title::after {
+      content: ''; display: block; width: 68px; height: 3px; border-radius: 2px;
+      margin: 18px auto 0; background: linear-gradient(90deg, var(--green2), var(--gold));
+    }
+
+    /* ── Tarjetas con relieve ── */
+    .servicio-card, .miembro-card, .trust-card, .game-card, .assessment-app-btn {
+      box-shadow: 0 1px 2px rgba(20,48,74,.04), 0 12px 32px -18px rgba(20,48,74,.35);
+    }
+    .servicio-card:hover, .trust-card:hover { transform: translateY(-4px); }
+    .servicio-card { background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%); }
+    .trust-card {
+      background: linear-gradient(180deg, rgba(255,255,255,.085) 0%, rgba(255,255,255,.035) 100%);
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── Sistema de íconos SVG (reemplaza los emojis) ── */
+    .ico { width: 30px; height: 30px; display: block; stroke-width: 1.6; fill: none; }
+    .servicio-icon.ico { stroke: var(--green2); margin-bottom: 16px; }
+    .servicio-card:hover .servicio-icon.ico { stroke: var(--navy2); }
+    .trust-card .ico { width: 30px; height: 30px; stroke: var(--gold2); margin-bottom: 12px; }
+    .ico-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    /* ── Composición gráfica del hero ── */
+    .hero-art {
+      position: absolute; right: -6%; top: 50%; transform: translateY(-50%);
+      width: min(760px, 62vw); height: auto; opacity: .5; z-index: 0; pointer-events: none;
+    }
+    .hero-art .orbit { transform-origin: 400px 400px; animation: orbitSpin 60s linear infinite; }
+    .hero-art .orbit.rev { animation-duration: 90s; animation-direction: reverse; }
+    .hero-art .node { animation: nodePulse 4s ease-in-out infinite; }
+    .hero-art .node:nth-of-type(2n) { animation-delay: 1.3s; }
+    @keyframes orbitSpin { to { transform: rotate(360deg); } }
+    @keyframes nodePulse { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+
+    /* ── Aparición al hacer scroll, con desplazamiento ── */
+    .fade-in { transform: translateY(18px); }
+    .fade-in.visible { transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-art .orbit, .hero-art .node { animation: none; }
+      .fade-in { transform: none; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-art { opacity: .22; right: -25%; width: 120vw; }
+      .section-header.center .section-title::after { margin-top: 14px; }
+    }
+
   </style>
 </head>
 <body>
+<!-- Set de iconos de linea (reemplazan a los emojis) -->
+<svg class="ico-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-target" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></symbol>
+  <symbol id="i-handshake" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2.6"/><circle cx="18" cy="7" r="2.6"/><circle cx="12" cy="17.5" r="2.8"/><path d="M7.7 9.2 10.6 15M16.3 9.2 13.4 15M8.6 7h6.8"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4"/><path d="M4 20h16"/><rect x="7.5" y="12" width="3" height="5" rx="1"/><rect x="13" y="8" width="3" height="9" rx="1"/><rect x="18" y="5" width="3" height="12" rx="1"/></symbol>
+  <symbol id="i-cycle" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 0 1 12.6-5.5"/><path d="M19.5 12a7.5 7.5 0 0 1-12.6 5.5"/><path d="M17.4 3.4v3.4h-3.4M6.6 20.6v-3.4h3.4"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 5.5-12 15-12 0 9-5 14-11 14-2.5 0-4-1-4-2Z"/><path d="M5 19c3-4.5 6.5-7 11-8.5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.4 5.6 12 3Z"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/><path d="M9.5 13h6M9.5 16.5h4"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5a5.5 5.5 0 0 1 11 0"/><path d="M16 5.6a3.2 3.2 0 0 1 0 6.2"/><path d="M17.2 14.4a5.5 5.5 0 0 1 3.3 5.1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10"/><path d="M4 8h16"/><path d="M4 8 1.8 13.2a3 3 0 0 0 4.4 0Z"/><path d="M20 8l2.2 5.2a3 3 0 0 1-4.4 0Z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10" width="15" height="10.5" rx="2.2"/><path d="M8.2 10V7.4a3.8 3.8 0 0 1 7.6 0V10"/><circle cx="12" cy="15.2" r="1.3"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2.2"/><path d="M2.5 10h19"/><path d="M6 14.6h3.5"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.2 8.8-2 4.4-4.4 2 2-4.4Z"/></symbol>
+</svg>
+
 
 <!-- ═══ NAV ═══ -->
 <nav id="nav">
@@ -722,6 +857,40 @@
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="inicio">
+    <!-- Composicion grafica: orbitas de los cuatro ejes -->
+    <svg class="hero-art" viewBox="0 0 800 800" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ha-gold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#E8C96B"/><stop offset="100%" stop-color="#C8A951" stop-opacity=".2"/>
+        </linearGradient>
+        <linearGradient id="ha-green" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7AAB52"/><stop offset="100%" stop-color="#5F8D3E" stop-opacity=".15"/>
+        </linearGradient>
+        <radialGradient id="ha-core">
+          <stop offset="0%" stop-color="#E8C96B" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#1F4E79" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="400" cy="400" r="250" fill="url(#ha-core)"/>
+      <g class="orbit">
+        <ellipse cx="400" cy="400" rx="300" ry="120" fill="none" stroke="url(#ha-gold)" stroke-width="1.4"/>
+        <circle class="node" cx="700" cy="400" r="7" fill="#E8C96B"/>
+        <circle class="node" cx="100" cy="400" r="5" fill="#7AAB52"/>
+      </g>
+      <g class="orbit rev" transform="rotate(60 400 400)">
+        <ellipse cx="400" cy="400" rx="300" ry="120" fill="none" stroke="url(#ha-green)" stroke-width="1.4"/>
+        <circle class="node" cx="700" cy="400" r="6" fill="#7AAB52"/>
+        <circle class="node" cx="100" cy="400" r="8" fill="#E8C96B"/>
+      </g>
+      <g class="orbit" transform="rotate(-60 400 400)">
+        <ellipse cx="400" cy="400" rx="300" ry="120" fill="none" stroke="url(#ha-gold)" stroke-width="1.2"/>
+        <circle class="node" cx="700" cy="400" r="5" fill="#E8C96B"/>
+        <circle class="node" cx="100" cy="400" r="6" fill="#7AAB52"/>
+      </g>
+      <circle cx="400" cy="400" r="150" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1" stroke-dasharray="4 10"/>
+      <circle cx="400" cy="400" r="58" fill="none" stroke="rgba(232,201,107,.55)" stroke-width="1.6"/>
+      <circle cx="400" cy="400" r="12" fill="#E8C96B"/>
+    </svg>
   <div class="hero-content">
     <div>
       <div style="margin-bottom:28px;display:inline-block">
@@ -778,47 +947,47 @@
     </div>
     <div class="servicios-grid">
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">🎯</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-target"/></svg>
         <h3 class="servicio-title">Estrategia Organizacional Sostenible</h3>
         <p class="servicio-desc">Diseño e implementación de estrategias corporativas que integran la sostenibilidad como ventaja competitiva y fuente de valor a largo plazo.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">🤝</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-handshake"/></svg>
         <h3 class="servicio-title">Valor Compartido y ESG</h3>
         <p class="servicio-desc">Alineación de objetivos empresariales con los ODS mediante marcos ESG que generan retorno económico y social simultáneamente.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">📊</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-chart"/></svg>
         <h3 class="servicio-title">Gerencia de Proyectos</h3>
         <p class="servicio-desc">Gestión profesional de proyectos de transformación con metodologías ágiles adaptadas al contexto de sostenibilidad corporativa.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">🔄</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-cycle"/></svg>
         <h3 class="servicio-title">Transformación Digital</h3>
         <p class="servicio-desc">Digitalización de procesos y soluciones que optimizan recursos, reducen huella ambiental y mejoran la eficiencia operacional.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">🌿</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-leaf"/></svg>
         <h3 class="servicio-title">Gestión Ambiental y Social</h3>
         <p class="servicio-desc">Identificación, evaluación y manejo de riesgos ambientales y sociales para proteger la licencia social de operación.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">🌍</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-globe"/></svg>
         <h3 class="servicio-title">Cambio Climático y Economía Circular</h3>
         <p class="servicio-desc">Estrategias de adaptación y mitigación climática e implementación de modelos de economía circular en la cadena de valor.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">📋</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-report"/></svg>
         <h3 class="servicio-title">Reportes de Sostenibilidad</h3>
         <p class="servicio-desc">Elaboración de informes bajo estándares GRI, SASB y TCFD que fortalecen la transparencia y credibilidad corporativa ante stakeholders.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">👥</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-people"/></svg>
         <h3 class="servicio-title">Relacionamiento con Stakeholders</h3>
         <p class="servicio-desc">Diseño de estrategias de diálogo y participación que construyen confianza y reducen riesgos reputacionales.</p>
       </div>
       <div class="servicio-card fade-in">
-        <span class="servicio-icon">⚖️</span>
+        <svg class="servicio-icon ico" aria-hidden="true"><use href="#i-scale"/></svg>
         <h3 class="servicio-title">Gestión Legal Ambiental</h3>
         <p class="servicio-desc">Asesoría en cumplimiento normativo ambiental e identificación de incentivos tributarios para inversiones sostenibles en Colombia.</p>
       </div>
@@ -1166,22 +1335,22 @@
 
     <div class="trust-grid">
       <div class="trust-card fade-in">
-        <span class="trust-card-icon">🔒</span>
+        <svg class="ico" aria-hidden="true"><use href="#i-lock"/></svg>
         <h4>Sus respuestas no salen de su navegador</h4>
         <p>Puede recorrer cualquier herramienta completa sin registrarse y sin dejar datos de contacto. Lo que responde se guarda únicamente en su equipo: no lo almacenamos ni lo compartimos con terceros.</p>
       </div>
       <div class="trust-card fade-in">
-        <span class="trust-card-icon">💳</span>
+        <svg class="ico" aria-hidden="true"><use href="#i-card"/></svg>
         <h4>El pago lo procesa PayPal, no nosotros</h4>
         <p>Las compras se realizan en la plataforma de PayPal, con tarjeta o con su cuenta. Nunca vemos, recibimos ni almacenamos los datos de su medio de pago; de la transacción solo conservamos la constancia.</p>
       </div>
       <div class="trust-card fade-in">
-        <span class="trust-card-icon">📐</span>
+        <svg class="ico" aria-hidden="true"><use href="#i-compass"/></svg>
         <h4>Metodologías públicas y citadas</h4>
         <p>Nuestras herramientas siguen marcos reconocidos y los declaran en cada informe, con los factores y referencias que se usaron. Usted puede rastrear de dónde salió cada resultado.</p>
       </div>
       <div class="trust-card fade-in">
-        <span class="trust-card-icon">⚖️</span>
+        <svg class="ico" aria-hidden="true"><use href="#i-scale"/></svg>
         <h4>Alcance declarado, sin letra menuda</h4>
         <p>Cada documento dice con claridad qué es y qué no es: son informes de orientación elaborados con la información que usted entrega, no auditorías ni verificaciones de un tercero independiente.</p>
       </div>
